@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+    <title>Document</title>
+    <style>
+        @media print {            
+            .column {
+                box-sizing: border-box;
+                position: relative;
+            }
+            .logo2 {
+                width: 150px;
+            }
+
+            .logo {
+                width: 55px;
+                height: auto;
+                margin: auto;
+            }
+
+            .qr-code {                
+                z-index: 9999;
+                padding-right: 1rem;
+            }
+            .text-center2 {
+                text-align: center;
+                position: relative;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-sans">    
+    <!-- Header -->
+    <header class="bg-gray-500 p-2 text-white">
+        <div class="w-full mx-auto flex justify-between items-center">
+            <!-- Columna Izquierda -->
+            <div class="flex w-1/5">
+                <div class="mr-4 text-center">
+                    <img src="<%= assetsURL %>/logo2.png" alt="background" class="w-14 h-14 mx-auto" />
+                    <p class="font-sans text-xs m-0 mt-2">Seccion RR.HH.</p>
+                </div>                
+            </div>
+    
+            <!-- Columna Centro -->
+            <div class="w-3/5 text-center">
+                <div class="flex flex-col justify-between font-sans">
+                    <h4 class="text-sm m-0 mb-2">Gobierno Autónomo del Departamento de Oruro</h4>
+                    <h6 class="text-xs m-0 mb-2"><%= info.area_nombre_padre %></h6>                   
+                    <h6 class="text-xs m-0 mb-2"><%= info.area_nombre_hijo %></h6>                   
+                </div>
+                <div class="w-5/5 mr-4 text-center  whitespace-nowrap overflow-hidden text-ellipsis">
+                    <h5 class="text-sm font-semibold mt-auto"><%= info.tipo_documento %></h5>
+                    <h4 class="text-xs m-0 mb-auto">Correspondiente a la gestion <%= info.gestion %> </h4>
+                     
+                </div>   
+            </div>
+    
+            <!-- Columna Derecha -->
+             <div class="w-1/5 text-right">
+               <!--  <img src="<%= qrCodeDataUrl %>" alt="QR Code" class="w-24 h-24 m-0 p-0 float-right">-->
+            </div>
+        </div>
+                 
+    </header>
+
+    <!-- Main Content -->
+    <main class="w-full mx-auto mt-5">
+        <!-- Table -->
+       
+        <!--Cuerpo nuevo de la tabla-->
+        <div>
+            
+            <div class="flex justify-center">
+
+                     <table>
+                        <thead>
+                        <tr>
+                            <!-- Encabezados de columna -->
+                           <!-- <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>4</th>
+                            <th>5</th>
+                            <th>6</th>
+                            <th>7</th>
+                            <th>8</th>
+                            <th>9</th>
+                            <th>10</th>
+                            <th>11</th>
+                            <th>12</th>-->
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Generar 40 filas con JavaScript para evitar hacerlo manual -->
+                                 <script id="iniciales-data" type="application/json">
+                                <%- JSON.stringify(iniciales || []) %>
+                                </script>                    
+                            <script>
+                                let count = 0;                             
+                                const iniciales = JSON.parse(document.getElementById('iniciales-data').textContent || '[]');
+                                                          
+                                for (let i = 1; i <= 40; i++) {
+                                    document.write('<tr>');
+                                        for (let j = 1; j <= 12; j++) {
+                                            count++;  
+                                            const abreviatura = iniciales[count - 1]?.abreviatura || "-";                                      
+                                            const fecha = iniciales[count - 1]?.fecha_registro || "/";       
+                                            const estado = (iniciales[count - 1]?.estado === "ACTIVO") ? "ACTIVO" : (iniciales[count - 1]?.estado === "ANULADO")?"ANULADO":(iniciales[count - 1]?.estado === "CERRADO")?"CERRADO":"-";
+                                             const style = estado === "ACTIVO" ? "background-color: #9CCC8E;" : estado === "ANULADO" ? "background-color: #F59987;" :estado === "CERRADO" ? "background-color: #C4C6C3;" : "" ;                           
+                                            document.write('<td class="text-xxs border border-gray-300 text-left"  style="width: 80px;font-size: 8px; ' + style + ' ">' + count + '  ' + abreviatura +'  ' + fecha + '</td>');
+                                        }
+                                    document.write('</tr>');
+                                }
+                            </script>                               
+                        
+                        </tbody>
+                    </table>
+
+            </div>
+        </div>
+
+
+
+        <!---Fin Cuerpo de la tabla -->
+      
+      
+    </main>
+</body>
+
+</html>

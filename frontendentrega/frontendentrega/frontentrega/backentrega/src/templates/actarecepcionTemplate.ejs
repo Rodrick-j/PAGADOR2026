@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+    <title>Document</title>
+    <style>
+        @media print {            
+            .column {
+                box-sizing: border-box;
+                position: relative;
+            }
+            .logo2 {
+                width: 150px;
+            }
+
+            .logo {
+                width: 55px;
+                height: auto;
+                margin: auto;
+            }
+
+            .qr-code {                
+                z-index: 9999;
+                padding-right: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-sans">    
+    <!-- Header -->
+    <header class="p-2">
+        <div class="container mx-auto flex justify-between items-center">
+            <!-- Columna Izquierda -->
+            <div class="flex w-1/5">
+                <div class="mr-4 text-center">
+                    <img src="<%= assetsURL %>/logo3.png" alt="background" class="w-24 h-24 mx-auto" />
+                    <p class="font-sans text-xs m-0 mt-2">Seccion de Archivos</p>                    
+                </div>                
+            </div>
+    
+            <!-- Columna Centro -->
+            <div class="w-3/5 text-center">
+                <div class="flex flex-col justify-between font-sans">
+                    <h4 class="text-lg m-0 mb-auto">Gobierno Autónomo del Departamento de Oruro</h4>
+                    <h6 class="text-sm m-0 mb-4">Secretaria Deptal. de Administración y Finanzas Publicas</h6>
+                    <h5 class="text-lg font-semibold mt-2">ACTA DE RECEPCIÓN</h5>
+                </div>
+            </div>
+    
+            <!-- Columna Derecha -->
+            <div class="w-1/5 text-right text-xs">
+                <span class="font-mono font-thin"><%= data.cod_acta %></span>
+                <img src="<%= qrCodeDataUrl %>" alt="QR Code" class="w-24 h-24 mx-auto">                
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto mt-1 text-sm">
+        <div class="mb-6 mt-1">
+            <p class="text-right mb-3"><%= data.fecha_registro %></p>            
+            <p class="text-justify mb-4">
+                La Sección de Archivos perteneciente a la Secretaria Departamental de Finanzas Públicas del Gobierno Autónomo Departamental de Oruro, en calidad de custodio, adjunta la siguiente acta de recepción referente al siguiente detalle:
+            </p>
+        </div>
+        <div class="mb-4">
+            <table class="table-auto text-sm w-full">
+                <tbody>
+                    <tr>
+                        <td class="font-semibold whitespace-nowrap w-1/5">A Nombre de:</td>
+                        <td><%= data.personal %></td>
+                    </tr>
+                    <tr>
+                        <td class="font-semibold whitespace-nowrap w-1/5 flex gap-4 p-1">Secretaria/Area/Unidad:</td>
+                        <td><%= data.area %></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <h2 class="font-semibold mb-2">Detalle Documentos:</h2>
+            <div class="flex justify-center">
+                <table class="text-sm border-collapse border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="border border-gray-300 px-2 p-0">#</th>
+                            <th class="border border-gray-300 px-2 p-0">Nro Doc.</th>
+                            <th class="border border-gray-300 px-2 p-0">Tipo</th>
+                            <th class="border border-gray-300 px-2 p-0">Gestión</th>
+                            <th class="border border-gray-300 px-2 p-0">Nro Folio</th>
+                            <th class="border border-gray-300 px-2 p-0">Descripcion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (data) { %>
+                            <% let count = 1; %>
+                            <% data.rows.forEach(function(row){ %>
+                                <tr>
+                                    <td class="border border-gray-300 px-2 p-0"><%= count++ %></td>
+                                    <td class="border border-gray-300 px-2 p-0"><%= row.nro %></td>
+                                    <td class="border border-gray-300 px-2 p-0 text-xs"><%= row.tipo %></td>
+                                    <td class="border border-gray-300 px-2 p-0 text-center"><%= row.gestion %></td>
+                                    <td class="border border-gray-300 px-2 p-0 text-center"><%= row.nrofolio %></td>
+                                    <td class="border border-gray-300 px-2 p-0 text-center text-xs"><%= row.descripcion %></td>
+                                </tr>                               
+                            <% }); %>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+            <div class="mb-1 mt-2">
+                <h2 class="font-semibold mb-2">Observaciones:</h2>
+                <p class="text-justify mb-4 text-xs"><%= data.observacion %></p>
+            </div>
+        </div>
+        <div class="flex justify-around mt-12">
+            <div class="ml-2">
+                <div class="h-24"></div>
+                <p class="text-center"><b>Entregue Conforme</b></p>                                        
+            </div>
+            <div class="mr-2">
+                <div class="h-24"></div>
+                <p class="text-center"><b>Recibi Conforme</b></p>
+            </div>
+        </div>    
+    </main>
+</body>
+
+</html>

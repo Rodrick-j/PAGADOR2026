@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+    <title>Document</title>
+    <style>
+        @media print {            
+            .column {
+                box-sizing: border-box;
+                position: relative;
+            }
+            .logo2 {
+                width: 150px;
+            }
+
+            .logo {
+                width: 55px;
+                height: auto;
+                margin: auto;
+            }
+
+            .qr-code {                
+                z-index: 9999;
+                padding-right: 1rem;
+            }
+            .text-center2 {
+                text-align: center;
+                position: relative;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-sans">    
+    <!-- Header -->
+    <header class="bg-gray-500 p-2 text-white">
+        <div class="w-full mx-auto flex justify-between items-center">
+            <!-- Columna Izquierda -->
+            <div class="flex w-1/5">
+                <div class="mr-4 text-center">
+                    <img src="<%= assetsURL %>/logo2.png" alt="background" class="w-14 h-14 mx-auto" />
+                    <p class="font-sans text-xs m-0 mt-2">Seccion RR.HH.</p>
+                </div>                
+            </div>
+    
+            <!-- Columna Centro -->
+            <div class="w-3/5 text-center">
+                <div class="flex flex-col justify-between font-sans">
+                    <h4 class="text-sm m-0 mb-auto">Gobierno Autónomo del Departamento de Oruro</h4>
+                    <h6 class="text-xs m-0 mb-4">Area de Recursos Humanos</h6>                   
+                </div>
+                <div class="w-5/5 mr-4 text-center  whitespace-nowrap overflow-hidden text-ellipsis">
+                    <h5 class="text-sm font-semibold mt-auto">REPORTE MEMORANDUMS DEL PERSONAL DE LA GOBERNACION DE ORURO</h5>
+                    <h4 class="text-xs m-0 mb-auto">Correspondiente a las fechas de <%= data.fecha_inicio_filtro %> al  <%= data.fecha_fin_filtro %> </h4>
+                      <h4 class="text-sm m-0 mb-auto">Control de memorandums sin cobro y asignacion de funciones</h4>            
+                </div>   
+            </div>
+    
+            <!-- Columna Derecha -->
+             <div class="w-1/5 text-right">
+               <!--  <img src="<%= qrCodeDataUrl %>" alt="QR Code" class="w-24 h-24 m-0 p-0 float-right">-->
+            </div>
+        </div>
+                 
+    </header>
+
+    <!-- Main Content -->
+    <main class="w-full mx-auto mt-8">
+        <!-- Table -->
+       
+        <!--Cuerpo nuevo de la tabla-->
+        <div>
+            
+            <div class="flex justify-center">
+                <table class="text-xxs text-left border-collapse border border-gray-300" style="width: 100%;">
+                    <% if(data.tipo_reporte === "GENERAL") {%>
+                        <thead>
+                            <tr class="bg-gray-200">
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Nº</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Tipo Memorandum</th>                                          
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">C.I.</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 200px;font-size: 8px">Nombre Completo</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Sigla</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 150px;font-size: 8px">Cod. Memorandum</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 150px;font-size: 8px">Destino</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Fecha inicio</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Fecha fin</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Estado</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Cantidad dias</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Tipo_usuario</th>
+                               <!--  <th class="text-xxs border border-gray-300 text-center"  style="width: 150px;font-size: 8px">Area Solicitante</th>    -->           
+                            </tr>
+                        </thead>
+                      <tbody>
+                        <% if (data) { %>
+                                <% data.rows.forEach(function(row, index){ %>
+                                    <tr>
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= index + 1 %></td>
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.tipo_memorandum %></td>                                        
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.usuario_ci %></td>
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 200px;font-size: 8px"><%= row.usuario_nombre %></td>
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.sigla %></td>   
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 120px;font-size: 8px"><%= row.cod_depart_memo %></td>      
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 150px;font-size: 8px"><%= row.destino %></td>  
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.fecha_inicio_viaje %></td> 
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.fecha_fin_viaje %></td>
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.estado_memorandum %></td> 
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.cantidad_dias %></td>  
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.tipo_usuario %></td>
+                                      <!--  <td class="text-xs border border-gray-300 text-center w-full" style="width: 150px;font-size: 8px"><%= row.area_solicitante %></td>  -->
+                                    </tr>                               
+                                <% }); %>                                            
+    
+                            <% } %>
+                        </tbody>
+                    <% } %>
+                    <% if(data.tipo_reporte === "REPORTE_POR_PROYECTO") {%>                        
+                        
+                        <% data.lista_areas.forEach(function(area){ %>
+                             
+                                <thead>    
+                                    <tr >
+                                        <th  colspan="14"> 
+                                            <h5 class="text-sm font-semibold text-center whitespace-nowrap overflow-hidden text-ellipsis"><%=area.nombre%></h5>
+                                        </th>
+                                    </tr>
+                                    <tr class="bg-gray-200">                                       
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Nº</th>
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Tipo Memorandum</th>                                          
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">C.I.</th>
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 200px;font-size: 8px">Nombre Completo</th>
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Sigla</th>
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 150px;font-size: 8px">Cod. Memorandum</th>
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 150px;font-size: 8px">Destino</th>
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Fecha inicio</th>
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Fecha fin</th>
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Estado</th>
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Cantidad dias</th>
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Tipo_usuario</th>
+                                        <!--<th class="text-xxs border border-gray-300 text-center"  style="width: 150px;font-size: 8px">Area Solicitante</th>   -->
+                                       
+                                    </tr>
+                                </thead>
+                            <tbody>
+                            
+                                <% if (data) { %>                                  
+                                    <% data.rows.forEach(function(row, index){ %>                                       
+                                        <% if (area.id === row.area_id) { %>
+                                                <tr>
+                                                      <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= index + 1 %></td>
+                                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.tipo_memorandum %></td>                                        
+                                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.usuario_ci %></td>
+                                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 200px;font-size: 8px"><%= row.usuario_nombre %></td>
+                                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.sigla %></td>   
+                                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 120px;font-size: 8px"><%= row.cod_depart_memo %></td>      
+                                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 150px;font-size: 8px"><%= row.destino %></td>  
+                                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.fecha_inicio_viaje %></td> 
+                                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.fecha_fin_viaje %></td>
+                                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.estado_memorandum %></td> 
+                                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.cantidad_dias %></td>  
+                                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.tipo_usuario %></td>
+                                                    <!--    <td class="text-xs border border-gray-300 text-center w-full" style="width: 150px;font-size: 8px"><%= row.area_solicitante %></td>  -->
+                                                      
+                                                </tr>    
+                                        <% } %>                           
+                                    <% }); %>                                
+                                <% } %>
+                            </tbody>      
+                        <% }); %>
+                    <% } %>
+
+                    <% if(data.tipo_reporte === "REPORTE_POR_BENEFICIARIO") {%>
+                       
+                        <% data.idBeneficiario.forEach(function(ben){ %>
+                                
+                            <thead>    
+                                <tr >
+                                    <th colspan="14"> 
+                                        <h5 class="text-sm font-semibold text-center whitespace-nowrap overflow-hidden text-ellipsis">Beneficiario :  <%=ben.usuario_nombre%></h5>
+                                        
+                                        <h5 class="text-sm font-semibold text-center whitespace-nowrap overflow-hidden text-ellipsis">CI :  <%=ben.usuario_ci%></h5>
+                                    </th>                                    
+                                </tr>
+                                <tr class="bg-gray-200">                                       
+                                                                    
+                                    <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Nº</th>
+                                    <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Tipo Memorandum</th>                                          
+                                    <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">C.I.</th>
+                                    <th class="text-xxs border border-gray-300 text-center"  style="width: 200px;font-size: 8px">Nombre Completo</th>
+                                    <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Sigla</th>
+                                    <th class="text-xxs border border-gray-300 text-center"  style="width: 150px;font-size: 8px">Cod. Memorandum</th>
+                                    <th class="text-xxs border border-gray-300 text-center"  style="width: 150px;font-size: 8px">Destino</th>
+                                    <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Fecha inicio</th>
+                                    <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Fecha fin</th>
+                                    <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Estado</th>
+                                    <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Cantidad dias</th>
+                                    <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Tipo_usuario</th>
+                                  <!--  <th class="text-xxs border border-gray-300 text-center"  style="width: 150px;font-size: 8px">Area Solicitante</th>   -->
+                                
+                                </tr>
+                            </thead>
+                        <tbody>
+                        
+                            <% if (data) { %>                                  
+                                <% data.rows.forEach(function(row, index){ %>         
+                                   
+                                            <tr>
+                                                  <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= index + 1 %></td>
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.tipo_memorandum %></td>                                        
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.usuario_ci %></td>
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 200px;font-size: 8px"><%= row.usuario_nombre %></td>
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.sigla %></td>   
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 120px;font-size: 8px"><%= row.cod_depart_memo %></td>      
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 150px;font-size: 8px"><%= row.destino %></td>  
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.fecha_inicio_viaje %></td> 
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.fecha_fin_viaje %></td>
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.estado_memorandum%></td> 
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.cantidad_dias %></td>  
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.tipo_usuario %></td>
+                                                 <!--   <td class="text-xs border border-gray-300 text-center w-full" style="width: 150px;font-size: 8px"><%= row.area_solicitante %></td>   -->                                              
+                                                
+                                            </tr>    
+                                                      
+                                <% }); %>                                
+                            <% } %>
+                           </tbody>      
+                       <% }); %>                        
+
+                    <% } %>   
+
+
+                    <% if(data.tipo_reporte === "REPORTE_POR_TIPO") {%>
+                        <thead>    
+                          <tr class="bg-gray-200">
+                               <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Nº</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Tipo Memorandum</th>                                          
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">C.I.</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 200px;font-size: 8px">Nombre Completo</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Sigla</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 150px;font-size: 8px">Cod. Memorandum</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 150px;font-size: 8px">Destino</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Fecha inicio</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Fecha fin</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Estado</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Cantidad dias</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Tipo_usuario</th>
+                                 <!--<th class="text-xxs border border-gray-300 text-center"  style="width: 150px;font-size: 8px">Area Solicitante</th>          -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                         <% if (data) { %>
+                              <% data.rows.forEach(function(row, index){ %>
+                                  <tr>
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= index + 1 %></td>
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.tipo_memorandum %></td>                                        
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.usuario_ci %></td>
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 200px;font-size: 8px"><%= row.usuario_nombre %></td>
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.sigla %></td>   
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 120px;font-size: 8px"><%= row.cod_depart_memo %></td>      
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 150px;font-size: 8px"><%= row.destino %></td>  
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.fecha_inicio_viaje %></td> 
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.fecha_fin_viaje %></td>
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.estado_memorandum %></td> 
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.cantidad_dias %></td>  
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.tipo_usuario %></td>
+                                        <!--<td class="text-xs border border-gray-300 text-center w-full" style="width: 150px;font-size: 8px"><%= row.area_solicitante %></td>-->
+                                  </tr>                               
+                              <% }); %>                                            
+  
+                          <% } %>
+                          </tbody>
+                      <% } %>
+                 <!--  <thead>
+                        <tr class="bg-gray-200">
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Num. Recibo</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 120px;font-size: 8px">Apertura Prog.</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">FF_OF</th>                          
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">C.I.</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 200px;font-size: 8px">Nombre Completo</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Sigla</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 120px;font-size: 8px">Cod. Memorandum</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 150px;font-size: 8px">Destino</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Fecha inicio</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Fecha fin</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Total Pasajes</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Total Viatico</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Liquido Pagable</th>
+                        </tr>
+                    </thead>
+                  <tbody>
+                    <% if (data) { %>
+                            <% data.rows.forEach(function(row){ %>
+                                <tr>
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.nume_recibo %></td>
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 120px;font-size: 8px"><%= row.apertura_programatica %></td>
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.ff_of %></td>
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.usuario_ci %></td>
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 200px;font-size: 8px"><%= row.usuario_nombre %></td>
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.sigla %></td>   
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 120px;font-size: 8px"><%= row.cod_depart_memo %></td>      
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 150px;font-size: 8px"><%= row.destino %></td>  
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.fecha_inicio_viaje %></td> 
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.fecha_fin_viaje %></td>
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.total_pasajes %></td> 
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.total_viatico %></td>  
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.liquido_pagable %></td>  
+                                </tr>                               
+                            <% }); %>                                            
+
+                        <% } %>
+                    </tbody>--> 
+                </table>
+            </div>
+        </div>
+
+
+
+        <!---Fin Cuerpo de la tabla -->
+      
+      
+    </main>
+</body>
+
+</html>

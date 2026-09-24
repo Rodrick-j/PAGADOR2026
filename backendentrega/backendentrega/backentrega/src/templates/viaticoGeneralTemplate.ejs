@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+    <title>Document</title>
+    <style>
+        @media print {            
+            .column {
+                box-sizing: border-box;
+                position: relative;
+            }
+            .logo2 {
+                width: 150px;
+            }
+
+            .logo {
+                width: 55px;
+                height: auto;
+                margin: auto;
+            }
+
+            .qr-code {                
+                z-index: 9999;
+                padding-right: 1rem;
+            }
+            .text-center2 {
+                text-align: center;
+                position: relative;
+            }
+            .filaPendiente{
+                background-color:#ffcccc;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-sans">    
+    <!-- Header -->
+    <header class="bg-gray-500 p-2 text-white">
+        <div class="w-full mx-auto flex justify-between items-center">
+            <!-- Columna Izquierda -->
+            <div class="flex w-1/5">
+                <div class="mr-4 text-center">
+                    <img src="<%= assetsURL %>/logo2.png" alt="background" class="w-14 h-14 mx-auto" />
+                    <p class="font-sans text-xs m-0 mt-2">Seccion Finanzas</p>
+                </div>                
+            </div>
+    
+            <!-- Columna Centro -->
+            <div class="w-3/5 text-center">
+                <div class="flex flex-col justify-between font-sans">
+                    <h4 class="text-sm m-0 mb-auto">Gobierno Autónomo del Departamento de Oruro</h4>
+                    <h6 class="text-xs m-0 mb-4">Secretaria Deptal. de Administración y Finanzas Publicas</h6>                   
+                </div>
+                <div class="w-5/5 mr-4 text-center  whitespace-nowrap overflow-hidden text-ellipsis">
+                    <h5 class="text-sm font-semibold mt-auto">REPORTE DE PAGO VIATICOS AL PERSONAL DE LA GOBERNACION DE ORURO</h5>
+                    <h4 class="text-xs m-0 mb-auto">Correspondiente a las fechas de <%= data.fecha_inicio_filtro %> al  <%= data.fecha_fin_filtro %> </h4>
+                      <h4 class="text-sm m-0 mb-auto">(Expresado en Bolivianos)</h4>  
+                      <h5 class="text-sm font-semibold mt-auto"><%=data.tipo_reporte  %> </h5>  
+                              
+                </div>   
+            </div>
+    
+            <!-- Columna Derecha -->
+            <div class="w-1/5 text-right">
+                <img src="<%= qrCodeDataUrl %>" alt="QR Code" class="w-24 h-24 m-0 p-0 float-right">
+            </div>
+        </div>
+                 
+    </header>
+
+    <!-- Main Content -->
+    <main class="w-full mx-auto mt-8">
+        <!-- Table -->
+       
+        <!--Cuerpo nuevo de la tabla-->
+        <% let total_liquido_pagable = 0;
+           let totalPasajesGeneral = 0;
+           let totalViaticosGeneral = 0;
+        %>
+        <div>
+            
+            <div class="flex justify-center">
+                <table class="text-xxs text-left border-collapse border border-gray-300" style="width: 100%;">
+                    <% if(data.tipo_reporte === "GENERAL") {%>
+                        <thead>
+                            <tr class="bg-gray-200">
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Num. Recibo</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Apertura Prog.</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">FF_OF</th>                          
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">C.I.</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 200px;font-size: 8px">Nombre Completo</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Sigla</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 150px;font-size: 8px">Cod. Memorandum</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 150px;font-size: 8px">Destino</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Fecha inicio</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Fecha fin</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Total Pasajes</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Total Viatico</th>
+                                <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Liquido Pagable</th>
+                            </tr>
+                        </thead>
+                      <tbody>
+                        <% if (data) { %>
+                                <% data.rows.forEach(function(row){
+                                     totalPasajesGeneral += Number(row.total_pasajes || 0);
+                                     totalViaticosGeneral += Number(row.total_viatico || 0);
+                                     total_liquido_pagable += parseFloat(row.liquido_pagable || 0); 
+                                    %>
+                                    <tr>
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.nume_recibo %></td>
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.apertura_programatica %></td>
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.ff_of %></td>
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.usuario_ci %></td>
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 200px;font-size: 8px"><%= row.usuario_nombre %></td>
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.sigla %></td>   
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 120px;font-size: 8px"><%= row.cod_depart_memo %></td>      
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 150px;font-size: 8px"><%= row.destino %></td>  
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.fecha_inicio_viaje %></td> 
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.fecha_fin_viaje %></td>
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.total_pasajes %></td> 
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.total_viatico %></td>  
+                                        <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.liquido_pagable %></td>  
+                                    </tr>                               
+                                <% }); %>                                            
+                                 <!--   <tfoot>
+                                    <tr class="bg-gray-300 font-bold" style="background-color: #ADADAD; color: black; font-weight: bold;">
+                                        <td colspan="12" class="text-right border border-gray-300" style="font-size: 12px">TOTAL:</td>
+                                        <td class="text-center border border-gray-300" style="font-size: 12px"><%= total_liquido_pagable.toFixed(2) %></td>
+                                    </tr>
+                                    </tfoot>-->
+                         <% } %>
+                        </tbody>                       
+                    <% } %>
+                    <% if(data.tipo_reporte === "REPORTE_POR_PLANILLA") {%>
+                      <thead>    
+                        <tr class="bg-gray-200">
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Num. Recibo</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">FF_OF</th>  
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Apertura Prog.</th>            
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 200px;font-size: 8px">Nombre Completo</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 150px;font-size: 8px">Cod. Memorandum</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 150px;font-size: 8px">Destino</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Fecha inicio</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Fecha fin</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Total Pasajes</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Total Viatico</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Liquido Pagable</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Descargo</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Deposito</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Descuento</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                       <% if (data) { %>
+                            <% data.rows.forEach(function(row){ 
+                                 totalPasajesGeneral += Number(row.total_pasajes || 0);
+                                 totalViaticosGeneral += Number(row.total_viatico || 0);
+                                 total_liquido_pagable += parseFloat(row.liquido_pagable || 0); 
+                                %>
+                                <tr>
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.nume_recibo %></td>
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.ff_of %></td>
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.apertura_programatica %></td>                                
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 200px;font-size: 8px"><%= row.usuario_nombre %></td>                               
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 120px;font-size: 8px"><%= row.cod_depart_memo %></td>      
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 150px;font-size: 8px"><%= row.destino %></td>  
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.fecha_inicio_viaje %></td> 
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.fecha_fin_viaje %></td>
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.total_pasajes %></td> 
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.total_viatico %></td>  
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.liquido_pagable %></td>  
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.monto_descargo %></td>
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.monto_depositado %></td>   
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.saldo_descargo %></td>  
+                                </tr>                               
+                            <% }); %>                                            
+                               <!--  <tfoot>
+                                    <tr class="bg-gray-300 font-bold" style="background-color: #ADADAD; color: black; font-weight: bold;">
+                                        <td colspan="12" class="text-right border border-gray-300" style="font-size: 12px">TOTAL:</td>
+                                        <td class="text-center border border-gray-300" style="font-size: 12px"><%= total_liquido_pagable.toFixed(2) %></td>
+                                    </tr>
+                                </tfoot>-->
+                        <% } %>
+                        </tbody>
+                    <% } %>
+                    <% if(data.tipo_reporte === "REPORTE_POR_PROYECTO") {%>                        
+                        
+                        <% data.lista_areas.forEach(function(area){ %>
+                             
+                                <thead>                                   
+                                </thead>
+                            <tbody>
+                                    <tr >
+                                        <th  colspan="14"> 
+                                            <h5 class="text-sm font-semibold text-center whitespace-nowrap overflow-hidden text-ellipsis"><%=area.nombre%></h5>
+                                        </th>
+                                    </tr>
+                                    <tr class="bg-gray-200">       
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Num. Recibo</th>                                  
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">FF_OF</th>  
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Apertura Prog.</th>                                           
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">C.I.</th>      
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 200px;font-size: 8px">Nombre Completo</th>
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Sigla</th>
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 150px;font-size: 8px">Cod. Memorandum</th>
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 150px;font-size: 8px">Destino</th>
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Fecha inicio</th>
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Fecha fin</th>
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Total Pasajes</th>
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Total Viatico</th>
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Liquido Pagable</th>
+                                       
+                                    </tr>
+                                                                
+                                <% if (data) { %>                                                                
+                                    <% area.registros.forEach(function(row){ %>        
+                                                <%
+                                                totalPasajesGeneral += Number(row.total_pasajes || 0);
+                                                totalViaticosGeneral += Number(row.total_viatico || 0);
+                                                total_liquido_pagable += Number(row.liquido_pagable || 0);
+                                                %>
+                                                <tr>
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.nume_recibo %></td>
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.ff_of %></td>
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.apertura_programatica %></td>                                
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.usuario_ci %></td>
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 200px;font-size: 8px"><%= row.usuario_nombre %></td>
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.sigla %></td>                               
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 120px;font-size: 8px"><%= row.cod_depart_memo %></td>      
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 150px;font-size: 8px"><%= row.destino %></td>  
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.fecha_inicio_viaje %></td> 
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.fecha_fin_viaje %></td>
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.total_pasajes %></td> 
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.total_viatico %></td>  
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.liquido_pagable %></td>                                                  
+                                                      
+                                                </tr>                                           
+                                                            
+                                    <% }); %>       
+                                                                                 <!-- TOTAL DEL ÁREA -->
+                                                <tr style="font-weight:bold;background:#f3f3f3;font-size:9px;">
+                                                    <td colspan="10" style="text-align:right;font-size:9px;">
+                                                        TOTAL ÁREA:
+                                                    </td>
+                                                        <td><%= area.totalPasajes.toFixed(2) %></td>
+                                                        <td><%= area.totalViatico.toFixed(2) %></td>
+                                                        <td><%= area.totalLiquido.toFixed(2) %></td>
+                                                </tr>                           
+                                <% } %>
+                            </tbody>      
+                        <% }); %>
+                    <% } %>
+
+                    <% if(data.tipo_reporte === "REPORTE_FF_OF") {%>
+                       
+                         <% data.lista_ffof.forEach(function(ffof){ %>
+                                
+                                <thead>    
+                                   
+                                </thead>
+                            <tbody>
+                                 <tr >
+                                        <th  colspan="14"> 
+                                            <h5 class="text-sm font-semibold text-center whitespace-nowrap overflow-hidden text-ellipsis">FF-OF :  <%=ffof%></h5>
+                                        </th>
+                                    </tr>
+                                    <tr class="bg-gray-200">                                       
+                                                                        
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Num. Recibo</th>    
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">FF_OF</th> 
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Apertura Prog.</th> 
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">C.I.</th>      
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 200px;font-size: 8px">Nombre Completo</th>
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Sigla</th>
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 150px;font-size: 8px">Cod. Memorandum</th>
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 150px;font-size: 8px">Destino</th>
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Fecha inicio</th>
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Fecha fin</th>
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Total Pasajes</th>
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Total Viatico</th>
+                                        <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Liquido Pagable</th>
+                                    
+                                    </tr>
+                                 <% 
+                                        let totalPasajesFFOF = 0;
+                                        let totalViaticoFFOF = 0;
+                                        let totalLiquidoFFOF = 0;                                       
+                                 %> 
+                                <% if (data) { %>                                  
+                                    <% data.rows.forEach(function(row){ %>                                       
+                                        <% if (ffof === row.ff_of) { %>
+
+                                                <%
+                                                totalPasajesFFOF += Number(row.total_pasajes || 0);
+                                                totalViaticoFFOF += Number(row.total_viatico || 0);
+                                                totalLiquidoFFOF += Number(row.liquido_pagable || 0);
+                                                %>
+                                                <%
+                                                totalPasajesGeneral += Number(row.total_pasajes || 0);
+                                                totalViaticosGeneral += Number(row.total_viatico || 0);
+                                                total_liquido_pagable += Number(row.liquido_pagable || 0);
+                                                %>
+                                                <tr>
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.nume_recibo %></td>                                               
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.ff_of %></td>
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.apertura_programatica %></td>                                
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.usuario_ci %></td>
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 200px;font-size: 8px"><%= row.usuario_nombre %></td>
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.sigla %></td>                               
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 120px;font-size: 8px"><%= row.cod_depart_memo %></td>      
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 150px;font-size: 8px"><%= row.destino %></td>  
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.fecha_inicio_viaje %></td> 
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.fecha_fin_viaje %></td>
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.total_pasajes %></td> 
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.total_viatico %></td>  
+                                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.liquido_pagable %></td>                                                  
+                                                    
+                                                </tr>    
+                                        <% } %>                           
+                                    <% }); %>        
+                                     <tr style="font-weight:bold;background:#f3f3f3;font-size:9px;">
+                                                    <td colspan="10" style="text-align:right;font-size:9px;">
+                                                        TOTAL FUENTE FINANCIAMIENTO:
+                                                    </td>
+                                                    <td><%= totalPasajesFFOF.toFixed(2) %></td>
+                                                    <td><%= totalViaticoFFOF.toFixed(2) %></td>
+                                                    <td><%= totalLiquidoFFOF.toFixed(2) %></td>
+                                    </tr>                            
+                                <% } %>
+                            </tbody>      
+                        <% }); %>
+                        
+                    <% } %>
+                    <% if(data.tipo_reporte === "REPORTE_POR_BENEFICIARIO") {%>
+                       
+                        <% data.idBeneficiario.forEach(function(ben){ %>
+                                
+                            <thead>    
+                                <tr >
+                                    <th colspan="14"> 
+                                        <h5 class="text-sm font-semibold text-center whitespace-nowrap overflow-hidden text-ellipsis">Beneficiario :  <%=ben.usuario_nombre%></h5>
+                                        
+                                        <h5 class="text-sm font-semibold text-center whitespace-nowrap overflow-hidden text-ellipsis">CI :  <%=ben.usuario_ci%></h5>
+                                    </th>                                    
+                                </tr>
+                                <tr class="bg-gray-200">                                       
+                                                                    
+                                    <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Num. Recibo</th>    
+                                    <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Apertura Prog.</th> 
+                                    <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">C.I.</th>      
+                                    <th class="text-xxs border border-gray-300 text-center"  style="width: 200px;font-size: 8px">Nombre Completo</th>
+                                    <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Sigla</th>
+                                    <th class="text-xxs border border-gray-300 text-center"  style="width: 150px;font-size: 8px">Cod. Memorandum</th>
+                                    <th class="text-xxs border border-gray-300 text-center"  style="width: 150px;font-size: 8px">Destino</th>
+                                    <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Fecha inicio</th>
+                                    <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Fecha fin</th>
+                                    <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Total Pasajes</th>
+                                    <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Total Viatico</th>
+                                    <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Liquido Pagable</th>
+                                
+                                </tr>
+                            </thead>
+                        <tbody>
+                        
+                             <% 
+                                let totalPasajesBEN = 0;
+                                let totalViaticoBEN = 0;
+                                let totalLiquidoBEN = 0;                                       
+                             %> 
+                            <% if (data) { %>                                  
+                                <% data.rows.forEach(function(row){ %>         
+                                                <%
+                                                totalPasajesBEN += Number(row.total_pasajes || 0);
+                                                totalViaticoBEN += Number(row.total_viatico || 0);
+                                                totalLiquidoBEN += Number(row.liquido_pagable || 0);
+                                                %>
+                                                <%
+                                                totalPasajesGeneral += Number(row.total_pasajes || 0);
+                                                totalViaticosGeneral += Number(row.total_viatico || 0);
+                                                total_liquido_pagable += Number(row.liquido_pagable || 0);
+                                                %>  
+                                            <tr>
+                                                <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.nume_recibo %></td>                                               
+                                                <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.apertura_programatica %></td>                                
+                                                <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.usuario_ci %></td>
+                                                <td class="text-xs border border-gray-300 text-center w-full" style="width: 200px;font-size: 8px"><%= row.usuario_nombre %></td>
+                                                <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.sigla %></td>                               
+                                                <td class="text-xs border border-gray-300 text-center w-full" style="width: 120px;font-size: 8px"><%= row.cod_depart_memo %></td>      
+                                                <td class="text-xs border border-gray-300 text-center w-full" style="width: 150px;font-size: 8px"><%= row.destino %></td>  
+                                                <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.fecha_inicio_viaje %></td> 
+                                                <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.fecha_fin_viaje %></td>
+                                                <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.total_pasajes %></td> 
+                                                <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.total_viatico %></td>  
+                                                <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.liquido_pagable %></td>                                                  
+                                                
+                                            </tr>    
+                                                      
+                                <% }); %>       
+                                 <tr style="font-weight:bold;background:#f3f3f3;font-size:9px;">
+                                                    <td colspan="9" style="text-align:right;font-size:9px;">
+                                                        TOTAL BENEFICIARIO:
+                                                    </td>
+                                                    <td><%= totalPasajesBEN.toFixed(2) %></td>
+                                                    <td><%= totalViaticoBEN.toFixed(2) %></td>
+                                                    <td><%= totalLiquidoBEN.toFixed(2) %></td>
+                                    </tr>                            
+                            <% } %>
+                           </tbody>      
+                       <% }); %>                        
+
+                    <% } %>   
+
+
+                    <% if(data.tipo_reporte === "REPORTE_POR_TIPO") {%>
+                        <thead>    
+                          <tr class="bg-gray-200">
+                              <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Num. Recibo</th>
+                              <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Tipo Usuario</th>
+                              <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">FF_OF</th>  
+                              <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Apertura Prog.</th>            
+                              <th class="text-xxs border border-gray-300 text-center"  style="width: 200px;font-size: 8px">Nombre Completo</th>
+                              <th class="text-xxs border border-gray-300 text-center"  style="width: 150px;font-size: 8px">Cod. Memorandum</th>
+                              <th class="text-xxs border border-gray-300 text-center"  style="width: 150px;font-size: 8px">Destino</th>
+                              <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Fecha inicio</th>
+                              <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Fecha fin</th>
+                              <th class="text-xxs border border-gray-300 text-center"  style="width: 60px;font-size: 8px">Total Pasajes</th>
+                              <th class="text-xxs border border-gray-300 text-center"  style="width: 60px;font-size: 8px">Total Viatico</th>
+                              <th class="text-xxs border border-gray-300 text-center"  style="width: 60px;font-size: 8px ">Liquido Pagable</th>
+                              <th class="text-xxs border border-gray-300 text-center"  style="width: 60px;font-size: 8px">Pasaje Real</th>
+                              <th class="text-xxs border border-gray-300 text-center"  style="width: 60px;font-size: 8px">Viatico Real</th>
+                              <th class="text-xxs border border-gray-300 text-center"  style="width: 60px;font-size: 8px">Saldo Descargo</th>
+                              <th class="text-xxs border border-gray-300 text-center"  style="width: 60px;font-size: 8px">Monto Depositado</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            <% 
+                                let totalPasajesTIPO = 0;
+                                let totalViaticoTIPO = 0;
+                                let totalLiquidoTIPO = 0;                                       
+                             %>
+                         <% if (data) { %>
+                              <% data.rows.forEach(function(row){ %>
+
+                                <%
+                                    totalPasajesTIPO += Number(row.total_pasajes || 0);
+                                    totalViaticoTIPO += Number(row.total_viatico || 0);
+                                    totalLiquidoTIPO += Number(row.liquido_pagable || 0);
+                                %>
+                                <%
+                                    totalPasajesGeneral += Number(row.total_pasajes || 0);
+                                    totalViaticosGeneral += Number(row.total_viatico || 0);
+                                    total_liquido_pagable += Number(row.liquido_pagable || 0);
+                                %> 
+                                    <% if (row.cod_depart_memo || row.apertura_programatica) { %>
+                                        <tr class="<%= (row.estado_descargo === 'PENDIENTE' || row.presenta_informe === 'PENDIENTE') ? 'filaPendiente' : '' %>">
+                                            <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.nume_recibo %></td>
+                                            <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.usuario_tipo %></td>
+                                            <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.ff_of %></td>
+                                            <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.apertura_programatica %></td>                                
+                                            <td class="text-xs border border-gray-300 text-center w-full" style="width: 200px;font-size: 8px"><%= row.usuario_nombre %></td>                               
+                                            <td class="text-xs border border-gray-300 text-center w-full" style="width: 120px;font-size: 8px"><%= row.cod_depart_memo %></td>      
+                                            <td class="text-xs border border-gray-300 text-center w-full" style="width: 150px;font-size: 8px"><%= row.destino %></td>  
+                                            <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.fecha_inicio_viaje %></td> 
+                                            <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.fecha_fin_viaje %></td>
+                                            <td class="text-xs border border-gray-300 text-center w-full" style="width: 60px;font-size: 8px"><%= row.total_pasajes %></td> 
+                                            <td class="text-xs border border-gray-300 text-center w-full" style="width: 60px;font-size: 8px"><%= row.total_viatico %></td>  
+                                            <td class="text-xs border border-gray-300 text-center w-full" style="width: 60px;font-size: 8px;font-weight: bold;"><%= row.liquido_pagable %></td>  
+                                            <td class="text-xs border border-gray-300 text-center w-full" style="width: 60px;font-size: 8px"><%= row.viatico_pasaje_real %></td>
+                                            <td class="text-xs border border-gray-300 text-center w-full" style="width: 60px;font-size: 8px"><%= row.viatico_real %></td>   
+                                            <td class="text-xs border border-gray-300 text-center w-full" style="width: 60px;font-size: 8px"><%= row.saldo_descargo%></td>  
+                                            <td class="text-xs border border-gray-300 text-center w-full" style="width: 60px;font-size: 8px"><%= row.monto_depositado %></td>  
+                                        </tr>  
+                                        <% } else { %>
+
+                                        <tr style="background:#ffeaea;">
+                                            <td class="text-xs border border-gray-300 text-center"><%= row.nume_recibo %></td>
+
+                                            <td colspan="13" class="text-xs border border-gray-300">
+                                                <strong>OBSERVACIÓN:</strong> <%= row.observacion_descargo %>
+                                            </td>
+
+                                            <td colspan="2" class="text-xs border border-gray-300 text-center" style="font-weight:bold;color:red;">
+                                                ANULADO
+                                            </td>
+                                        </tr>
+
+                                        <% } %>                        
+
+
+                              <% }); %>                                            
+                                  <tr style="font-weight:bold;background:#f3f3f3;font-size:9px;">
+                                                    <td colspan="9" style="text-align:right;font-size:9px;">
+                                                        TOTAL TIPO:
+                                                    </td>
+                                                    <td><%= totalPasajesTIPO.toFixed(2) %></td>
+                                                    <td><%= totalViaticoTIPO.toFixed(2) %></td>
+                                                    <td><%= totalLiquidoTIPO.toFixed(2) %></td>
+                                    </tr> 
+                          <% } %>
+                          </tbody>
+                      <% } %>
+                 <!--  <thead>
+                        <tr class="bg-gray-200">
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Num. Recibo</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 120px;font-size: 8px">Apertura Prog.</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">FF_OF</th>                          
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">C.I.</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 200px;font-size: 8px">Nombre Completo</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Sigla</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 120px;font-size: 8px">Cod. Memorandum</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 150px;font-size: 8px">Destino</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Fecha inicio</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 100px;font-size: 8px">Fecha fin</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Total Pasajes</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Total Viatico</th>
+                            <th class="text-xxs border border-gray-300 text-center"  style="width: 80px;font-size: 8px">Liquido Pagable</th>
+                        </tr>
+                    </thead>
+                  <tbody>
+                    <% if (data) { %>
+                            <% data.rows.forEach(function(row){ %>
+                                <tr>
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.nume_recibo %></td>
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 120px;font-size: 8px"><%= row.apertura_programatica %></td>
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.ff_of %></td>
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.usuario_ci %></td>
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 200px;font-size: 8px"><%= row.usuario_nombre %></td>
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.sigla %></td>   
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 120px;font-size: 8px"><%= row.cod_depart_memo %></td>      
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 150px;font-size: 8px"><%= row.destino %></td>  
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.fecha_inicio_viaje %></td> 
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 100px;font-size: 8px"><%= row.fecha_fin_viaje %></td>
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.total_pasajes %></td> 
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.total_viatico %></td>  
+                                    <td class="text-xs border border-gray-300 text-center w-full" style="width: 80px;font-size: 8px"><%= row.liquido_pagable %></td>  
+                                </tr>                               
+                            <% }); %>                                            
+
+                        <% } %>
+                    </tbody>--> 
+                </table>
+            </div>
+        </div> 
+        <div class="text-right mt-2" style="page-break-inside: avoid;">
+        <table style="width: 100%;">
+            <tr class="bg-gray-300 font-bold" style="background-color: #ADADAD; color: black; font-weight: bold;">
+            <td colspan="10" class="text-right border border-gray-300" style="font-size: 12px">TOTAL GENERAL:</td>
+            <td class="text-center border border-gray-300" style="font-size: 12px"><%= totalPasajesGeneral.toFixed(2) %></td>
+             <td class="text-center border border-gray-300" style="font-size: 12px"><%= totalViaticosGeneral.toFixed(2) %></td>
+              <td class="text-center border border-gray-300" style="font-size: 12px"><%= total_liquido_pagable.toFixed(2) %></td>
+            </tr>
+        </table>
+        </div>
+
+
+        <!---Fin Cuerpo de la tabla -->
+      
+      
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,1339 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Auditoría PAGADOR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+
+<style>
+/* ============================================================
+   Paleta derivada del escudo del GADOR: azul del blasón, oro
+   del filo, verde del laurel, granate de la marca "Unidad!".
+   ============================================================ */
+:root {
+    --ground:      #F5F6F3;
+    --surface:     #FFFFFF;
+    --surface-2:   #ECEEE9;
+    --ink:         #14212B;
+    --ink-2:       #3D4E5A;
+    --ink-3:       #6B7A84;
+    --hairline:    #D6DBD6;
+    --hairline-2:  #E5E8E3;
+
+    --azul:        #1B3A5C;
+    --azul-soft:   #E4EAF0;
+    --oro:         #A9761A;
+    --oro-soft:    #F6EDDA;
+    --laurel:      #3F6B4A;
+    --laurel-soft: #E3EDE4;
+    --granate:     #91232A;
+    --granate-soft:#F6E4E4;
+    --ambar:       #9A6410;
+    --ambar-soft:  #F7EBD7;
+
+    --shadow:      0 1px 2px rgba(20,33,43,.05), 0 8px 24px -16px rgba(20,33,43,.28);
+
+    --display: "Fraunces", "Iowan Old Style", Georgia, serif;
+    --body:    "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+    --mono:    "JetBrains Mono", "SF Mono", Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --ground:      #0E1820;
+        --surface:     #14212B;
+        --surface-2:   #1B2C38;
+        --ink:         #E7EDEA;
+        --ink-2:       #AEBDC4;
+        --ink-3:       #7E8F98;
+        --hairline:    #263945;
+        --hairline-2:  #1E2F3A;
+
+        --azul:        #7FA9CE;
+        --azul-soft:   #17303F;
+        --oro:         #D9A648;
+        --oro-soft:    #2C2415;
+        --laurel:      #7FB48C;
+        --laurel-soft: #182A1F;
+        --granate:     #E0868A;
+        --granate-soft:#2E1719;
+        --ambar:       #D9A24B;
+        --ambar-soft:  #2B2113;
+
+        --shadow:      0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+    }
+}
+
+:root[data-theme="dark"] {
+    --ground:      #0E1820;
+    --surface:     #14212B;
+    --surface-2:   #1B2C38;
+    --ink:         #E7EDEA;
+    --ink-2:       #AEBDC4;
+    --ink-3:       #7E8F98;
+    --hairline:    #263945;
+    --hairline-2:  #1E2F3A;
+
+    --azul:        #7FA9CE;
+    --azul-soft:   #17303F;
+    --oro:         #D9A648;
+    --oro-soft:    #2C2415;
+    --laurel:      #7FB48C;
+    --laurel-soft: #182A1F;
+    --granate:     #E0868A;
+    --granate-soft:#2E1719;
+    --ambar:       #D9A24B;
+    --ambar-soft:  #2B2113;
+
+    --shadow:      0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 16.5px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Estructura ---------- */
+.shell {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 28px 96px;
+    display: grid;
+    grid-template-columns: 232px minmax(0, 1fr);
+    gap: 56px;
+    align-items: start;
+}
+
+nav.toc {
+    position: sticky;
+    top: 24px;
+    padding-top: 40px;
+    font-size: 14px;
+}
+nav.toc .toc-title {
+    font-family: var(--body);
+    font-size: 11px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1px; }
+nav.toc a {
+    display: flex;
+    gap: 10px;
+    padding: 6px 10px 6px 0;
+    color: var(--ink-2);
+    text-decoration: none;
+    border-left: 2px solid var(--hairline-2);
+    padding-left: 12px;
+    transition: color .15s, border-color .15s;
+}
+nav.toc a:hover { color: var(--azul); border-left-color: var(--azul); }
+nav.toc a .n {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    padding-top: 3px;
+    font-variant-numeric: tabular-nums;
+}
+
+main { min-width: 0; padding-top: 40px; }
+
+/* ---------- Portada ---------- */
+.masthead {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 26px;
+    margin-bottom: 40px;
+}
+.eyebrow {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--oro);
+    font-weight: 600;
+    margin: 0 0 14px;
+}
+h1 {
+    font-family: var(--display);
+    font-size: clamp(38px, 5.6vw, 62px);
+    font-weight: 600;
+    line-height: 1.02;
+    letter-spacing: -.02em;
+    margin: 0 0 18px;
+    text-wrap: balance;
+}
+.standfirst {
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--ink-2);
+    max-width: 60ch;
+    margin: 0 0 22px;
+}
+.byline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 22px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-3);
+}
+.byline b { color: var(--ink-2); font-weight: 600; }
+
+/* ---------- Métricas ---------- */
+.metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0;
+    border: 1px solid var(--hairline);
+    border-radius: 3px;
+    background: var(--surface);
+    overflow: hidden;
+    margin: 0 0 12px;
+}
+.metric {
+    padding: 20px 22px;
+    border-right: 1px solid var(--hairline-2);
+}
+.metric:last-child { border-right: 0; }
+.metric .v {
+    font-family: var(--display);
+    font-size: 34px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -.02em;
+    font-variant-numeric: tabular-nums;
+    display: block;
+    margin-bottom: 7px;
+}
+.metric .k {
+    font-size: 12.5px;
+    color: var(--ink-3);
+    line-height: 1.35;
+    display: block;
+}
+.metric.bad .v { color: var(--granate); }
+.metric.warn .v { color: var(--ambar); }
+.metric.ok  .v { color: var(--laurel); }
+.metric-note { font-size: 13px; color: var(--ink-3); margin: 0 0 44px; font-style: italic; }
+
+/* ---------- Secciones ---------- */
+section { margin-bottom: 62px; scroll-margin-top: 20px; }
+h2 {
+    font-family: var(--display);
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: -.015em;
+    line-height: 1.15;
+    margin: 0 0 6px;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    text-wrap: balance;
+}
+h2 .num {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--oro);
+    letter-spacing: 0;
+    flex: none;
+}
+.section-rule { height: 1px; background: var(--hairline); margin: 0 0 24px; }
+h3 {
+    font-family: var(--body);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 38px 0 14px;
+}
+p { margin: 0 0 16px; max-width: 68ch; }
+main a { color: var(--azul); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+code {
+    font-family: var(--mono);
+    font-size: .855em;
+    background: var(--surface-2);
+    border: 1px solid var(--hairline-2);
+    border-radius: 3px;
+    padding: 1px 5px;
+    color: var(--ink);
+    word-break: break-word;
+}
+strong { font-weight: 700; color: var(--ink); }
+
+/* ---------- Hallazgos (libro mayor) ---------- */
+.ledger { display: flex; flex-direction: column; gap: 10px; }
+.finding {
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-left: 4px solid var(--ink-3);
+    border-radius: 0 3px 3px 0;
+    padding: 16px 20px 17px;
+}
+.finding.critico { border-left-color: var(--granate); }
+.finding.alto    { border-left-color: var(--ambar); }
+.finding.medio   { border-left-color: var(--azul); }
+.finding.bajo    { border-left-color: var(--ink-3); }
+.finding.hecho   { border-left-color: var(--laurel); background: var(--laurel-soft); }
+
+.f-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+.f-id {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--ink-3);
+    letter-spacing: .04em;
+}
+.f-title { font-weight: 700; font-size: 16.5px; flex: 1 1 340px; line-height: 1.35; }
+.pill {
+    font-family: var(--body);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    white-space: nowrap;
+}
+.pill.critico { background: var(--granate-soft); color: var(--granate); }
+.pill.alto    { background: var(--ambar-soft);   color: var(--ambar); }
+.pill.medio   { background: var(--azul-soft);    color: var(--azul); }
+.pill.bajo    { background: var(--surface-2);    color: var(--ink-3); }
+.pill.hecho   { background: var(--laurel-soft);  color: var(--laurel); border: 1px solid var(--laurel); }
+
+.f-body { font-size: 15.5px; color: var(--ink-2); margin: 0 0 10px; max-width: 76ch; }
+.f-meta { display: flex; flex-direction: column; gap: 5px; font-size: 13.5px; }
+.f-meta div { display: flex; gap: 9px; align-items: baseline; }
+.f-meta .lbl {
+    font-family: var(--body);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    flex: none;
+    width: 74px;
+    padding-top: 2px;
+}
+.f-meta .val { color: var(--ink-2); min-width: 0; }
+.f-meta .val.path { font-family: var(--mono); font-size: 12.5px; word-break: break-all; }
+
+/* ---------- Tablas ---------- */
+.tw { overflow-x: auto; border: 1px solid var(--hairline); border-radius: 3px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14.5px; min-width: 520px; }
+th {
+    text-align: left;
+    font-size: 10.5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: 700;
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--hairline);
+    background: var(--surface-2);
+    white-space: nowrap;
+}
+td { padding: 10px 16px; border-bottom: 1px solid var(--hairline-2); vertical-align: top; color: var(--ink-2); }
+tr:last-child td { border-bottom: 0; }
+td strong { color: var(--ink); }
+td.mono, .num-col { font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+.tag-404 { color: var(--granate); font-weight: 700; font-family: var(--mono); font-size: 12.5px; }
+.tag-ok  { color: var(--laurel); font-weight: 700; font-family: var(--mono); font-size: 12.5px; }
+
+/* ---------- Diagrama ---------- */
+.figure { margin: 24px 0 8px; }
+.figure .scroll { overflow-x: auto; border: 1px solid var(--hairline); border-radius: 3px; background: var(--surface); padding: 22px 20px; }
+.figure svg { display: block; }
+figcaption { font-size: 13px; color: var(--ink-3); margin-top: 10px; font-style: italic; }
+
+/* ---------- Dominios ---------- */
+.domains { display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap: 1px; background: var(--hairline); border: 1px solid var(--hairline); border-radius: 3px; overflow: hidden; }
+.domain { background: var(--surface); padding: 18px 20px 20px; }
+.domain h4 { font-family: var(--body); font-size: 16px; font-weight: 700; margin: 0 0 3px; color: var(--ink); }
+.domain .api { font-family: var(--mono); font-size: 11.5px; color: var(--oro); margin: 0 0 9px; }
+.domain p { font-size: 14px; color: var(--ink-2); margin: 0 0 10px; }
+.domain .tables { font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); line-height: 1.6; word-break: break-word; }
+
+/* ---------- Automatización ---------- */
+.autos { display: flex; flex-direction: column; gap: 1px; background: var(--hairline); border: 1px solid var(--hairline); border-radius: 3px; overflow: hidden; }
+.auto { background: var(--surface); padding: 17px 20px; display: grid; grid-template-columns: 34px minmax(0,1fr) 108px; gap: 16px; align-items: start; }
+.auto .idx { font-family: var(--mono); font-size: 12px; color: var(--oro); font-weight: 600; padding-top: 3px; }
+.auto h4 { font-family: var(--body); font-size: 16px; font-weight: 700; margin: 0 0 5px; }
+.auto p { font-size: 14.5px; color: var(--ink-2); margin: 0; max-width: none; }
+.auto .now { font-size: 13px; color: var(--ink-3); margin-top: 6px; display: block; }
+.auto .impact { font-family: var(--body); font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; text-align: right; padding-top: 4px; }
+.impact.alto { color: var(--granate); }
+.impact.medio { color: var(--ambar); }
+
+/* ---------- Fases ---------- */
+.phases { display: flex; flex-direction: column; gap: 12px; }
+.phase { border: 1px solid var(--hairline); border-radius: 3px; background: var(--surface); padding: 18px 22px 20px; }
+.phase .p-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px; margin-bottom: 4px; }
+.phase .p-n { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--oro); letter-spacing: .06em; }
+.phase h4 { font-family: var(--display); font-size: 21px; font-weight: 600; margin: 0; flex: 1 1 200px; }
+.phase .dur { font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
+.phase p { font-size: 15px; margin: 0 0 12px; }
+.phase ul { margin: 0; padding-left: 19px; font-size: 14.5px; color: var(--ink-2); display: flex; flex-direction: column; gap: 5px; }
+.phase.now { border-color: var(--granate); border-width: 1px 1px 1px 4px; }
+
+/* ---------- Notas ---------- */
+.callout {
+    border: 1px solid var(--hairline);
+    border-left: 4px solid var(--oro);
+    background: var(--oro-soft);
+    border-radius: 0 3px 3px 0;
+    padding: 16px 20px;
+    margin: 22px 0;
+}
+.callout p { margin: 0; font-size: 15px; color: var(--ink-2); max-width: none; }
+.callout p + p { margin-top: 10px; }
+
+ul.plain { margin: 0 0 18px; padding-left: 19px; display: flex; flex-direction: column; gap: 7px; max-width: 70ch; color: var(--ink-2); }
+ul.plain li { font-size: 15.5px; }
+
+footer {
+    border-top: 1px solid var(--hairline);
+    margin-top: 20px;
+    padding-top: 22px;
+    font-size: 13px;
+    color: var(--ink-3);
+    max-width: 70ch;
+}
+
+:focus-visible { outline: 2px solid var(--oro); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+@media (max-width: 900px) {
+    .shell { grid-template-columns: 1fr; gap: 0; padding: 0 20px 72px; }
+    nav.toc { position: static; padding-top: 34px; }
+    nav.toc ol { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 2px; }
+    main { padding-top: 30px; }
+    .auto { grid-template-columns: 26px minmax(0,1fr); }
+    .auto .impact { grid-column: 2; text-align: left; padding-top: 0; }
+    .metric { border-right: 0; border-bottom: 1px solid var(--hairline-2); }
+}
+
+/* ============================================================
+   IMPRESIÓN / PDF — paleta clara forzada, una sola columna,
+   y cortes de página que nunca parten un hallazgo por la mitad.
+   ============================================================ */
+@page {
+    size: A4;
+    margin: 15mm 14mm 16mm;
+}
+
+@media print {
+    :root, :root[data-theme="dark"], :root:not([data-theme="light"]) {
+        --ground:      #FFFFFF;
+        --surface:     #FFFFFF;
+        --surface-2:   #F2F4F0;
+        --ink:         #14212B;
+        --ink-2:       #3D4E5A;
+        --ink-3:       #67757F;
+        --hairline:    #C8CFC8;
+        --hairline-2:  #DFE3DE;
+        --azul:        #1B3A5C;
+        --azul-soft:   #E4EAF0;
+        --oro:         #8F6314;
+        --oro-soft:    #F6EDDA;
+        --laurel:      #33593C;
+        --laurel-soft: #E3EDE4;
+        --granate:     #852026;
+        --granate-soft:#F6E4E4;
+        --ambar:       #855510;
+        --ambar-soft:  #F7EBD7;
+        --shadow:      none;
+    }
+
+    html, body {
+        background: #fff;
+        font-size: 10.2pt;
+        line-height: 1.5;
+    }
+
+    /* Una sola columna: el índice se convierte en sumario de portada */
+    .shell {
+        display: block;
+        max-width: none;
+        padding: 0;
+    }
+    main { padding-top: 0; }
+
+    nav.toc {
+        position: static;
+        padding: 0;
+        margin: 0 0 14mm;
+        break-after: page;
+        page-break-after: always;
+    }
+    nav.toc .toc-title { font-size: 9pt; margin-bottom: 8px; }
+    nav.toc ol {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3px 22px;
+    }
+    nav.toc a { border-left-width: 2px; padding: 4px 0 4px 10px; font-size: 10pt; }
+
+    /* Portada */
+    .masthead { padding-bottom: 6mm; margin-bottom: 8mm; }
+    h1 { font-size: 30pt; }
+    .standfirst { font-size: 12pt; }
+    .byline { font-size: 8.5pt; }
+
+    /* Nada de sombras ni efectos en papel */
+    .metrics, .finding, .phase, .callout, .tw, .domains, .autos, .figure .scroll {
+        box-shadow: none !important;
+    }
+
+    /* Cortes de página */
+    section { break-inside: auto; margin-bottom: 9mm; }
+    h2 { break-after: avoid; page-break-after: avoid; font-size: 17pt; }
+    h3 { break-after: avoid; page-break-after: avoid; margin-top: 7mm; }
+    .finding, .phase, .auto, .domain, .callout, .metric, figure {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    tr, .f-meta div { break-inside: avoid; page-break-inside: avoid; }
+    thead { display: table-header-group; }
+
+    /* El contenido ancho ya no scrollea: se ajusta */
+    .tw, .figure .scroll { overflow: visible; }
+    table { min-width: 0; font-size: 9pt; }
+    th, td { padding: 5px 8px; }
+    .figure svg { width: 100%; height: auto; }
+
+    .metrics { grid-template-columns: repeat(5, 1fr); }
+    .metric { padding: 10px 12px; }
+    .metric .v { font-size: 21pt; }
+    .metric .k { font-size: 8pt; }
+
+    .finding { padding: 10px 13px 11px; }
+    .f-title { font-size: 11.5pt; }
+    .f-body { font-size: 10pt; }
+    .f-meta { font-size: 9.2pt; }
+
+    .auto { grid-template-columns: 26px minmax(0,1fr) 90px; padding: 10px 13px; }
+    .domain { padding: 11px 13px 13px; }
+    .phase { padding: 11px 14px 13px; }
+
+    p, ul.plain, .f-body { max-width: none; }
+    main a { color: var(--ink); text-decoration: none; }
+    footer { margin-top: 8mm; padding-top: 5mm; font-size: 8.5pt; max-width: none; }
+}
+</style>
+</head>
+<body>
+
+
+<div class="shell">
+
+<nav class="toc" aria-label="Contenido">
+    <div class="toc-title">Contenido</div>
+    <ol>
+        <li><a href="#resumen"><span class="n">01</span><span>Resumen</span></a></li>
+        <li><a href="#arquitectura"><span class="n">02</span><span>Arquitectura</span></a></li>
+        <li><a href="#dominios"><span class="n">03</span><span>Los ocho dominios</span></a></li>
+        <li><a href="#seguridad-hoy"><span class="n">04</span><span>Cómo funciona el acceso</span></a></li>
+        <li><a href="#hallazgos"><span class="n">05</span><span>Los 28 huecos</span></a></li>
+        <li><a href="#fantasma"><span class="n">06</span><span>Rutas fantasma</span></a></li>
+        <li><a href="#automatizar"><span class="n">07</span><span>Qué automatizar</span></a></li>
+        <li><a href="#modulos"><span class="n">08</span><span>Módulos nuevos</span></a></li>
+        <li><a href="#ruta"><span class="n">09</span><span>Hoja de ruta</span></a></li>
+    </ol>
+</nav>
+
+<main>
+
+<header class="masthead">
+    <p class="eyebrow">Plataforma P.A.GADOR · Revisión técnica integral</p>
+    <h1>Auditoría PAGADOR</h1>
+    <p class="standfirst">Cómo está construido el sistema, los 28 huecos que tiene hoy, y qué hace falta para llevarlo de “funciona si nadie se equivoca” a una plataforma que se defiende sola.</p>
+    <div class="byline">
+        <span><b>Alcance</b> backend + frontend + base de datos</span>
+        <span><b>Base analizada</b> 98.026 líneas</span>
+        <span><b>Entorno</b> local aislado <code>pagador-local-isolated</code></span>
+    </div>
+</header>
+
+<!-- ============ 01 ============ -->
+<section id="resumen">
+    <h2><span class="num">01</span> Resumen</h2>
+    <div class="section-rule"></div>
+
+    <div class="metrics">
+        <div class="metric"><span class="v">98.026</span><span class="k">líneas de código<br>backend + frontend</span></div>
+        <div class="metric bad"><span class="v">2</span><span class="k">archivos de prueba<br>en todo el proyecto</span></div>
+        <div class="metric bad"><span class="v">0</span><span class="k">validaciones en las<br>45 entidades</span></div>
+        <div class="metric bad"><span class="v">0</span><span class="k">claves foráneas<br>de 69 relaciones</span></div>
+        <div class="metric warn"><span class="v">15</span><span class="k">ítems del menú<br>que dan 404</span></div>
+    </div>
+    <p class="metric-note">Medido sobre el código fuente el 8 de septiembre de 2026, con la base local recién sincronizada (44 tablas, 54 rutas de menú, 4 roles).</p>
+
+    <p>PAGADOR es la plataforma administrativa interna del Gobierno Autónomo Departamental de Oruro. Cubre ocho dominios reales de una gobernación: recursos humanos, viáticos y comisiones, combustible y vehículos, apertura presupuestaria, contrataciones, archivo y actas, correspondencia (CITEs) y contabilidad. Es un sistema grande y ambicioso, y en el uso diario <strong>funciona</strong>.</p>
+
+    <p>El problema no es que falle: es que <strong>no tiene ninguna barrera entre lo que un usuario escribe y lo que queda grabado</strong>. La arquitectura por capas está dibujada —Entidad, Servicio, Repositorio, Result— pero cada capa está vacía por dentro. Las entidades no validan, la base de datos no exige integridad referencial, las operaciones de dinero no son atómicas, y los permisos que el sistema muestra en pantalla no se verifican en el servidor.</p>
+
+    <p>A eso se suman cuatro agujeros de seguridad explotables hoy mismo, entre ellos un endpoint que <strong>borra tablas enteras sin pedir sesión</strong> y una clave de firma de sesiones escrita dentro del código fuente.</p>
+
+    <div class="callout">
+        <p><strong>Por qué “siempre le hacían mantenimiento”.</strong> No existen migraciones de base de datos: el único mecanismo de esquema es <code>sync({ force: true })</code>, que borra todas las tablas. En producción eso significa que cada cambio de columna se hizo a mano, sin historial y sin poder revertirse. Sumado a 2 pruebas automatizadas en 98.000 líneas, cualquier cambio es cirugía a ciegas.</p>
+        <p>Ese es el costo real: no es que el sistema esté “mal hecho”, es que <strong>no tiene red de seguridad</strong>, y por eso cada ajuste exige una persona vigilándolo.</p>
+    </div>
+</section>
+
+<!-- ============ 02 ============ -->
+<section id="arquitectura">
+    <h2><span class="num">02</span> Arquitectura</h2>
+    <div class="section-rule"></div>
+
+    <p>El backend es Node + Express + Sequelize sobre MySQL 8, organizado por módulos. Cada entidad de negocio repite la misma estructura de cinco archivos:</p>
+
+    <div class="tw">
+        <table>
+            <thead><tr><th>Capa</th><th>Archivo</th><th>Qué debería hacer</th><th>Qué hace hoy</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Ruta</strong></td><td class="mono">*ViewControllerRoutes.ts</td><td>Declarar endpoints y guardias</td><td class="tag-404">40 sin guardia</td></tr>
+                <tr><td><strong>Controlador</strong></td><td class="mono">*ViewController.ts</td><td>Leer <code>req.body</code> y validarlo</td><td class="tag-404">no valida</td></tr>
+                <tr><td><strong>Vista</strong></td><td class="mono">*View.ts</td><td>Componer la respuesta</td><td class="tag-ok">cumple</td></tr>
+                <tr><td><strong>Servicio</strong></td><td class="mono">*Service.ts</td><td>Reglas de negocio</td><td class="tag-404">casi vacío</td></tr>
+                <tr><td><strong>Entidad</strong></td><td class="mono">*Entity.ts</td><td>Invariantes del dominio</td><td class="tag-404">0 de 45</td></tr>
+                <tr><td><strong>Repositorio</strong></td><td class="mono">*RepositorySQL.ts</td><td>Persistencia y transacciones</td><td class="tag-404">sin transacción</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>El camino de un dato, y dónde se pierde el control</h3>
+
+    <figure class="figure">
+        <div class="scroll">
+            <svg width="880" height="252" viewBox="0 0 880 252" role="img" aria-label="Diagrama del recorrido de una petición desde el navegador hasta MySQL, señalando las cinco capas donde falta control">
+                <defs>
+                    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+                        <path d="M0,0 L7,3 L0,6 Z" fill="var(--ink-3)"/>
+                    </marker>
+                </defs>
+
+                <text x="0" y="13" font-family="JetBrains Mono, monospace" font-size="10.5" letter-spacing="1.4" fill="var(--ink-3)">RECORRIDO DE UNA PETICIÓN</text>
+
+                <!-- cadena de cajas -->
+                <g font-family="Source Sans 3, sans-serif">
+                    <rect x="0"   y="32" width="118" height="46" rx="3" fill="var(--surface-2)" stroke="var(--hairline)"/>
+                    <text x="59"  y="53" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">Navegador</text>
+                    <text x="59"  y="68" text-anchor="middle" font-size="11" fill="var(--ink-3)">React · MUI</text>
+
+                    <rect x="152" y="32" width="118" height="46" rx="3" fill="var(--surface-2)" stroke="var(--hairline)"/>
+                    <text x="211" y="53" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">Express</text>
+                    <text x="211" y="68" text-anchor="middle" font-size="11" fill="var(--ink-3)">CORS abierto</text>
+
+                    <rect x="304" y="32" width="118" height="46" rx="3" fill="var(--surface-2)" stroke="var(--hairline)"/>
+                    <text x="363" y="53" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">Middleware</text>
+                    <text x="363" y="68" text-anchor="middle" font-size="11" fill="var(--ink-3)">verifica token</text>
+
+                    <rect x="456" y="32" width="118" height="46" rx="3" fill="var(--surface-2)" stroke="var(--hairline)"/>
+                    <text x="515" y="53" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">Controlador</text>
+                    <text x="515" y="68" text-anchor="middle" font-size="11" fill="var(--ink-3)">lee req.body</text>
+
+                    <rect x="608" y="32" width="118" height="46" rx="3" fill="var(--surface-2)" stroke="var(--hairline)"/>
+                    <text x="667" y="53" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">Entidad</text>
+                    <text x="667" y="68" text-anchor="middle" font-size="11" fill="var(--ink-3)">+ Repositorio</text>
+
+                    <rect x="760" y="32" width="118" height="46" rx="3" fill="var(--azul-soft)" stroke="var(--azul)"/>
+                    <text x="819" y="53" text-anchor="middle" font-size="13" font-weight="700" fill="var(--azul)">MySQL</text>
+                    <text x="819" y="68" text-anchor="middle" font-size="11" fill="var(--azul)">44 tablas</text>
+                </g>
+
+                <!-- flechas -->
+                <g stroke="var(--ink-3)" stroke-width="1.2" marker-end="url(#ar)">
+                    <line x1="120" y1="55" x2="146" y2="55"/>
+                    <line x1="272" y1="55" x2="298" y2="55"/>
+                    <line x1="424" y1="55" x2="450" y2="55"/>
+                    <line x1="576" y1="55" x2="602" y2="55"/>
+                    <line x1="728" y1="55" x2="754" y2="55"/>
+                </g>
+
+                <!-- conectores a los huecos -->
+                <g stroke="var(--granate)" stroke-width="1.2" stroke-dasharray="3 3">
+                    <line x1="211" y1="80" x2="211" y2="112"/>
+                    <line x1="363" y1="80" x2="363" y2="112"/>
+                    <line x1="515" y1="80" x2="515" y2="112"/>
+                    <line x1="667" y1="80" x2="667" y2="112"/>
+                    <line x1="819" y1="80" x2="819" y2="112"/>
+                </g>
+
+                <!-- tarjetas de hueco -->
+                <g font-family="Source Sans 3, sans-serif">
+                    <rect x="152" y="112" width="118" height="70" rx="3" fill="var(--granate-soft)" stroke="var(--granate)"/>
+                    <text x="211" y="131" text-anchor="middle" font-size="11" font-weight="700" fill="var(--granate)">SIN ESCUDO</text>
+                    <text x="211" y="148" text-anchor="middle" font-size="10.5" fill="var(--ink-2)">sin helmet, sin</text>
+                    <text x="211" y="162" text-anchor="middle" font-size="10.5" fill="var(--ink-2)">límite de peticiones,</text>
+                    <text x="211" y="176" text-anchor="middle" font-size="10.5" fill="var(--ink-2)">sin CSRF</text>
+
+                    <rect x="304" y="112" width="118" height="70" rx="3" fill="var(--granate-soft)" stroke="var(--granate)"/>
+                    <text x="363" y="131" text-anchor="middle" font-size="11" font-weight="700" fill="var(--granate)">SIN GUARDIA</text>
+                    <text x="363" y="148" text-anchor="middle" font-size="10.5" fill="var(--ink-2)">40 endpoints sin</text>
+                    <text x="363" y="162" text-anchor="middle" font-size="10.5" fill="var(--ink-2)">sesión; permisos</text>
+                    <text x="363" y="176" text-anchor="middle" font-size="10.5" fill="var(--ink-2)">solo en pantalla</text>
+
+                    <rect x="456" y="112" width="118" height="70" rx="3" fill="var(--granate-soft)" stroke="var(--granate)"/>
+                    <text x="515" y="131" text-anchor="middle" font-size="11" font-weight="700" fill="var(--granate)">SIN FILTRO</text>
+                    <text x="515" y="148" text-anchor="middle" font-size="10.5" fill="var(--ink-2)">ninguna librería</text>
+                    <text x="515" y="162" text-anchor="middle" font-size="10.5" fill="var(--ink-2)">de validación en</text>
+                    <text x="515" y="176" text-anchor="middle" font-size="10.5" fill="var(--ink-2)">el proyecto</text>
+
+                    <rect x="608" y="112" width="118" height="70" rx="3" fill="var(--granate-soft)" stroke="var(--granate)"/>
+                    <text x="667" y="131" text-anchor="middle" font-size="11" font-weight="700" fill="var(--granate)">SIN REGLAS</text>
+                    <text x="667" y="148" text-anchor="middle" font-size="10.5" fill="var(--ink-2)">45 entidades que</text>
+                    <text x="667" y="162" text-anchor="middle" font-size="10.5" fill="var(--ink-2)">aceptan todo; cero</text>
+                    <text x="667" y="176" text-anchor="middle" font-size="10.5" fill="var(--ink-2)">transacciones</text>
+
+                    <rect x="760" y="112" width="118" height="70" rx="3" fill="var(--granate-soft)" stroke="var(--granate)"/>
+                    <text x="819" y="131" text-anchor="middle" font-size="11" font-weight="700" fill="var(--granate)">SIN CANDADO</text>
+                    <text x="819" y="148" text-anchor="middle" font-size="10.5" fill="var(--ink-2)">0 claves foráneas,</text>
+                    <text x="819" y="162" text-anchor="middle" font-size="10.5" fill="var(--ink-2)">0 NOT NULL,</text>
+                    <text x="819" y="176" text-anchor="middle" font-size="10.5" fill="var(--ink-2)">2 UNIQUE de 449</text>
+                </g>
+
+                <line x1="0" y1="206" x2="880" y2="206" stroke="var(--hairline)" stroke-width="1"/>
+                <text x="0" y="228" font-family="Source Sans 3, sans-serif" font-size="12.5" fill="var(--ink-2)">Un dato mal formado atraviesa las cinco capas sin que ninguna lo detenga y queda grabado como bueno.</text>
+                <text x="0" y="245" font-family="Source Sans 3, sans-serif" font-size="12.5" fill="var(--ink-3)">Cinco oportunidades de rechazarlo, cinco puertas abiertas.</text>
+            </svg>
+        </div>
+        <figcaption>Cada capa existe y tiene su archivo; ninguna ejerce el control que le corresponde.</figcaption>
+    </figure>
+</section>
+
+<!-- ============ 03 ============ -->
+<section id="dominios">
+    <h2><span class="num">03</span> Los ocho dominios</h2>
+    <div class="section-rule"></div>
+
+    <p>41 módulos de API, 44 tablas y 56 pantallas repartidos así:</p>
+
+    <div class="domains">
+        <div class="domain">
+            <h4>Sistema</h4>
+            <p class="api">/users · /roles · /rutas · /bitacora · /setting · /storage</p>
+            <p>Usuarios, roles, catálogo de pantallas y auditoría. Toda petición autenticada se registra automáticamente.</p>
+            <p class="tables">usuario · role · ruta · acceso · bitacora</p>
+        </div>
+        <div class="domain">
+            <h4>Recursos Humanos</h4>
+            <p class="api">/personal · /area · /cargo · /vacacion · /memorandum_rrhh</p>
+            <p>Planilla, estructura organizativa y vacaciones con flujo de aprobación en dos pasos: jefe, luego RR.HH.</p>
+            <p class="tables">personal · area · cargo · vacacion · memorandum_rrhh · detalle_destino_rrhh</p>
+        </div>
+        <div class="domain">
+            <h4>Viáticos</h4>
+            <p class="api">/memorandum · /viatico · /descargo · /escala · /apertura_viatico</p>
+            <p>El dominio más completo: designación de comisión, cálculo de pasajes y viático según escala y destino, pago y rendición.</p>
+            <p class="tables">apertura_viatico · memorandum · escala · escala_destino · viatico · descargo · detalle_destino · informe_comision · informe_general · vehiculo_publico</p>
+        </div>
+        <div class="domain">
+            <h4>Bienes y Combustible</h4>
+            <p class="api">/vale · /vehiculo · /destino · /asignacion · /bitacora_viaje</p>
+            <p>Vales de combustible con estados, parque automotor, destinos tarifados y bitácora de recorridos.</p>
+            <p class="tables">vale · vehiculo · destino · asignacion · bitacora_viaje · bitacora_detalle</p>
+        </div>
+        <div class="domain">
+            <h4>Apertura presupuestaria</h4>
+            <p class="api">/apertura_general · /objeto_gasto · /historial_apertura</p>
+            <p>Presupuesto por apertura programática y partida: inicial, modificaciones, vigente, pagado y saldo por ejecutar.</p>
+            <p class="tables">apertura_general · objeto_gasto · historial_detalle_ap · historial_gasto_ap</p>
+        </div>
+        <div class="domain">
+            <h4>Contrataciones</h4>
+            <p class="api">/proceso · /actividad · /general</p>
+            <p>Procesos con CUCE, modalidad y hoja de ruta, con actividades y plazos asociados. Tenía enlace al sistema externo SIGAPO, hoy inactivo.</p>
+            <p class="tables">proceso · actividad · general</p>
+        </div>
+        <div class="domain">
+            <h4>Archivo</h4>
+            <p class="api">/documento · /acta · /acta_recepcion</p>
+            <p>Gestión documental y actas de recepción por área, con código, adjuntos y marca de sellado.</p>
+            <p class="tables">documento · acta · acta_recepcion · acta_recepcion_detalle</p>
+        </div>
+        <div class="domain">
+            <h4>Correspondencia y Contabilidad</h4>
+            <p class="api">/cites · /cuenta · /deuda</p>
+            <p>Registro de CITEs con área solicitante, destino, referencia y plazo; y el módulo contable de cuentas y deudas.</p>
+            <p class="tables">cites · tipo_cites · cuenta · deuda · seguimiento · historial</p>
+        </div>
+    </div>
+
+    <h3>Patrones comunes a todas las tablas</h3>
+    <ul class="plain">
+        <li><code>id</code> es siempre UUID de 36 caracteres, nunca autoincremental.</li>
+        <li>Las relaciones se nombran <code>fid_algo</code> (<code>fid_area</code>, <code>fid_usuario</code>, <code>fid_personal</code>) y casi todo termina conectando con RR.HH.</li>
+        <li>El borrado es lógico: <code>fecha_eliminacion</code> se llena en vez de borrar la fila. Toda consulta manual debe filtrar <code>WHERE fecha_eliminacion IS NULL</code>.</li>
+        <li>Los montos usan <code>DOUBLE</code>, no <code>DECIMAL</code> — aceptable para reportes, arriesgado para cuadres exactos al centavo.</li>
+        <li>Casi todo tiene una máquina de estados: <code>PENDIENTE → EN_PROCESO / APROBADO → ATENDIDO / PAGADO</code>, con salidas a <code>RECHAZADO</code> o <code>ANULADO</code>.</li>
+    </ul>
+</section>
+
+<!-- ============ 04 ============ -->
+<section id="seguridad-hoy">
+    <h2><span class="num">04</span> Cómo funciona el acceso</h2>
+    <div class="section-rule"></div>
+
+    <p>Tres tablas gobiernan todo el sistema: <code>usuario</code> apunta a <code>role</code>, y <code>role</code> declara qué entradas de <code>ruta</code> puede ver.</p>
+
+    <div class="tw">
+        <table>
+            <thead><tr><th>Paso</th><th>Qué ocurre</th><th>Dónde</th></tr></thead>
+            <tbody>
+                <tr><td class="mono">1</td><td>El usuario envía correo y contraseña</td><td class="mono">POST /api/users/login</td></tr>
+                <tr><td class="mono">2</td><td>El servidor busca por <strong>la columna <code>username</code></strong>, no por <code>email</code>, y compara el hash bcrypt</td><td class="mono">UsuarioService.findByEmail</td></tr>
+                <tr><td class="mono">3</td><td>Devuelve un token JWT de 7 días con el tipo de rol dentro</td><td class="mono">base/utils/jwt.ts</td></tr>
+                <tr><td class="mono">4</td><td>El frontend pide la sesión y recibe <code>{ roles, permisos, modulos[] }</code></td><td class="mono">GET /api/users/session-info</td></tr>
+                <tr><td class="mono">5</td><td>El menú se dibuja cruzando <code>role.modulos</code> con la tabla <code>ruta</code></td><td class="mono">UsuarioView.getSessionInfo</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="callout">
+        <p><strong>El punto crítico está en el paso 5.</strong> Los permisos —<code>create</code>, <code>edit</code>, <code>remove</code>, <code>approve</code>— y la lista de módulos solo deciden <em>qué se dibuja en pantalla</em>. El servidor nunca los consulta antes de escribir. Un usuario con sesión válida puede llamar por su cuenta cualquier endpoint de cualquier módulo, vea o no ese módulo en su menú.</p>
+        <p>El único control real que existe es <code>checkIfSuperAdmin</code>, presente en 17 de los 349 puntos protegidos.</p>
+    </div>
+
+    <p>Los cuatro roles sembrados son <code>superadministrador</code>, <code>administrador</code>, <code>tecnico</code> y <code>jefe</code>. El identificador lógico vive en <code>role.tipo</code>; <code>role.nombre</code> es solo la etiqueta visible.</p>
+</section>
+
+<!-- ============ 05 ============ -->
+<section id="hallazgos">
+    <h2><span class="num">05</span> Los 28 huecos</h2>
+    <div class="section-rule"></div>
+
+    <p>Cada hallazgo se verificó leyendo el código o probándolo contra el entorno local. El orden es por severidad dentro de cada grupo.</p>
+
+    <h3>Seguridad — 11 hallazgos</h3>
+    <div class="ledger">
+
+        <article class="finding critico">
+            <div class="f-head"><span class="f-id">SEC-01</span><span class="f-title">Un endpoint sin sesión borra tablas completas</span><span class="pill critico">Crítico</span></div>
+            <p class="f-body"><code>GET /api/setting/purgar_all</code> no lleva ningún middleware de autenticación y termina en <code>destroy({ where:{}, truncate:true, force:true })</code>, que vacía la tabla físicamente saltándose el borrado lógico.</p>
+            <div class="f-meta">
+                <div><span class="lbl">Dónde</span><span class="val path">views/system/setting/controller/SettingViewControllerRoutes.ts:23 · base/infra/_sql/BaseSQLRepository.ts</span></div>
+                <div><span class="lbl">Riesgo</span><span class="val">Al ser <code>GET</code>, basta que alguien abra la URL. Un rastreador, una precarga del navegador o un enlace pegado por error destruyen datos sin vuelta atrás.</span></div>
+                <div><span class="lbl">Arreglo</span><span class="val">Eliminar la ruta. Si se necesita, convertirla en <code>POST</code> con <code>checkIfSuperAdmin</code>, confirmación explícita y registro en bitácora.</span></div>
+            </div>
+        </article>
+
+        <article class="finding critico">
+            <div class="f-head"><span class="f-id">SEC-02</span><span class="f-title">La clave que firma las sesiones está escrita en el código</span><span class="pill critico">Crítico</span></div>
+            <p class="f-body">El secreto JWT tiene un valor de reserva literal dentro del repositorio: <code>process.env.JWT_SECRET || "gobierno_autonomo…"</code>. Si el servidor arranca sin la variable de entorno, usa ese valor.</p>
+            <div class="f-meta">
+                <div><span class="lbl">Dónde</span><span class="val path">backentrega/src/base/utils/jwt.ts:4</span></div>
+                <div><span class="lbl">Riesgo</span><span class="val">Cualquiera con acceso al código fuente puede fabricar un token de superadministrador válido y entrar como quien quiera.</span></div>
+                <div><span class="lbl">Arreglo</span><span class="val">Quitar el valor de reserva y hacer que el proceso <strong>no arranque</strong> si falta <code>JWT_SECRET</code>. Rotar el secreto en producción invalida las sesiones actuales, que es justamente lo que se busca.</span></div>
+            </div>
+        </article>
+
+        <article class="finding critico">
+            <div class="f-head"><span class="f-id">SEC-03</span><span class="f-title">Cerca de 40 endpoints de lectura no piden sesión</span><span class="pill critico">Crítico</span></div>
+            <p class="f-body">Presupuesto, contrataciones, escalas de viático y estructura de personal se sirven sin <code>checkIfAuthenticated</code>. Entre ellos <code>/api/apertura_general</code>, <code>/api/procesos</code>, <code>/api/cites_all_documentos</code>, <code>/api/areas</code>, <code>/api/cargos</code>, <code>/api/vehiculos</code>, <code>/api/apertura_viatico</code>, <code>/api/escala</code> y <code>/api/historial_apertura</code>.</p>
+            <div class="f-meta">
+                <div><span class="lbl">Dónde</span><span class="val path">múltiples *ViewControllerRoutes.ts en views/admin y views/rrhh</span></div>
+                <div><span class="lbl">Riesgo</span><span class="val">Quien alcance la API lee información presupuestaria y de contrataciones sin credenciales.</span></div>
+                <div><span class="lbl">Arreglo</span><span class="val">Invertir el criterio: aplicar el guardia a nivel de router en <code>Api.ts</code> y declarar explícitamente las poquísimas rutas públicas.</span></div>
+            </div>
+        </article>
+
+        <article class="finding critico">
+            <div class="f-head"><span class="f-id">SEC-04</span><span class="f-title">Los archivos subidos se descargan sin autenticación</span><span class="pill critico">Crítico</span></div>
+            <p class="f-body"><code>GET /api/storage/file/:filename</code> es la única ruta del módulo sin guardia, y los archivos conservan su nombre original, así que son adivinables.</p>
+            <div class="f-meta">
+                <div><span class="lbl">Dónde</span><span class="val path">views/system/storage/controller/StorageViewControllerRoutes.ts</span></div>
+                <div><span class="lbl">Riesgo</span><span class="val">Actas, memorándums y respaldos de descargo quedan expuestos a quien acierte el nombre.</span></div>
+                <div><span class="lbl">Arreglo</span><span class="val">Exigir sesión, guardar con nombre aleatorio y verificar que quien pide el archivo tenga derecho al registro que lo referencia.</span></div>
+            </div>
+        </article>
+
+        <article class="finding alto">
+            <div class="f-head"><span class="f-id">SEC-05</span><span class="f-title">Se acepta cualquier archivo, de cualquier tipo y tamaño</span><span class="pill alto">Alto</span></div>
+            <p class="f-body"><code>uploadFile</code> no comprueba tipo MIME, extensión ni peso, y guarda con el nombre que envía el cliente. Dos archivos con el mismo nombre se pisan en silencio.</p>
+            <div class="f-meta">
+                <div><span class="lbl">Dónde</span><span class="val path">views/system/storage/controller/StorageViewController.ts:15</span></div>
+                <div><span class="lbl">Arreglo</span><span class="val">Lista blanca de tipos, límite de tamaño en Busboy y nombre generado por el servidor.</span></div>
+            </div>
+        </article>
+
+        <article class="finding alto">
+            <div class="f-head"><span class="f-id">SEC-06</span><span class="f-title">Un archivo subido puede ejecutar código en el navegador</span><span class="pill alto">Alto</span></div>
+            <p class="f-body"><code>getFile</code> responde con <code>Content-Disposition: inline</code> y un <code>Content-Type</code> deducido del nombre del archivo. Un <code>.html</code> o <code>.svg</code> subido se ejecuta dentro del origen de la API.</p>
+            <div class="f-meta">
+                <div><span class="lbl">Dónde</span><span class="val path">views/system/storage/controller/StorageViewController.ts:117</span></div>
+                <div><span class="lbl">Riesgo</span><span class="val">Robo de sesiones de otros usuarios (XSS almacenado) desde un archivo que parece un adjunto normal.</span></div>
+                <div><span class="lbl">Arreglo</span><span class="val">Servir siempre como <code>attachment</code>, forzar <code>Content-Type</code> a partir de la lista blanca y añadir <code>X-Content-Type-Options: nosniff</code>.</span></div>
+            </div>
+        </article>
+
+        <article class="finding alto">
+            <div class="f-head"><span class="f-id">SEC-07</span><span class="f-title">Cualquier usuario con sesión borra cualquier archivo</span><span class="pill alto">Alto</span></div>
+            <p class="f-body"><code>DELETE /api/storage/upload</code> recibe solo un <code>fileName</code> y lo elimina. No comprueba quién subió el archivo ni a qué registro pertenece.</p>
+            <div class="f-meta">
+                <div><span class="lbl">Arreglo</span><span class="val">Verificar propiedad contra el registro que referencia el archivo antes de borrar.</span></div>
+            </div>
+        </article>
+
+        <article class="finding alto">
+            <div class="f-head"><span class="f-id">SEC-08</span><span class="f-title">Los permisos del rol no se verifican en el servidor</span><span class="pill alto">Alto</span></div>
+            <p class="f-body">Los indicadores <code>create</code>, <code>edit</code>, <code>remove</code> y <code>approve</code> aparecen en apenas 6 lugares del código, todos dentro de archivos <code>*View.ts</code> y solo para decidir qué mostrar. Ningún endpoint de escritura los consulta.</p>
+            <div class="f-meta">
+                <div><span class="lbl">Riesgo</span><span class="val">Un técnico sin permiso de aprobación puede aprobar llamando al endpoint directamente.</span></div>
+                <div><span class="lbl">Arreglo</span><span class="val">Middleware <code>requierePermiso('approve')</code> aplicado en las rutas de escritura, leyendo el rol desde la base y no desde el token.</span></div>
+            </div>
+        </article>
+
+        <article class="finding medio">
+            <div class="f-head"><span class="f-id">SEC-09</span><span class="f-title">El login revela qué correos existen</span><span class="pill medio">Medio</span></div>
+            <p class="f-body">Ante un usuario inexistente responde <code>500</code> con el texto <code>"Usuario no encontrado con ese email: X"</code>; ante una contraseña incorrecta responde otro mensaje. La diferencia permite enumerar cuentas.</p>
+            <div class="f-meta">
+                <div><span class="lbl">Arreglo</span><span class="val">Responder siempre <code>401</code> con un mensaje único, como “credenciales inválidas”.</span></div>
+            </div>
+        </article>
+
+        <article class="finding medio">
+            <div class="f-head"><span class="f-id">SEC-10</span><span class="f-title">Las sesiones duran 7 días y no se pueden revocar</span><span class="pill medio">Medio</span></div>
+            <p class="f-body"><code>expiresIn: "7d"</code> sin token de refresco ni lista de revocación. Cerrar sesión solo borra el token del navegador; el token sigue siendo válido una semana.</p>
+            <div class="f-meta">
+                <div><span class="lbl">Arreglo</span><span class="val">Token de acceso corto (15–30 min) más token de refresco revocable, y una lista de revocación consultada al validar.</span></div>
+            </div>
+        </article>
+
+        <article class="finding medio">
+            <div class="f-head"><span class="f-id">SEC-11</span><span class="f-title">Sin cabeceras de seguridad, sin límite de peticiones, CORS abierto</span><span class="pill medio">Medio</span></div>
+            <p class="f-body">No hay <code>helmet</code> ni limitador de intentos; <code>cors()</code> se llama sin opciones, aceptando cualquier origen. La configuración de base de datos fija además <code>ssl.rejectUnauthorized: false</code>, que acepta cualquier certificado.</p>
+            <div class="f-meta">
+                <div><span class="lbl">Riesgo</span><span class="val">Sin límite de intentos, la contraseña de cualquier cuenta puede probarse por fuerza bruta indefinidamente.</span></div>
+            </div>
+        </article>
+    </div>
+
+    <h3>Integridad de datos — 5 hallazgos</h3>
+    <div class="ledger">
+
+        <article class="finding critico">
+            <div class="f-head"><span class="f-id">INT-01</span><span class="f-title">Ninguna de las 45 entidades valida nada</span><span class="pill critico">Crítico</span></div>
+            <p class="f-body">Cada <code>XEntity.create()</code> es literalmente <code>return Result.ok(new XEntity(props, id))</code>. Cero llamadas a <code>Result.fail</code> en las 45 entidades. Tampoco hay librería de validación (joi, zod, express-validator) entre las dependencias.</p>
+            <div class="f-meta">
+                <div><span class="lbl">Consecuencia</span><span class="val">Se puede grabar un viático con <code>total_viatico = -5000</code>, una vacación cuya fecha de fin es anterior a la de inicio, o un personal sin CI. Nadie pregunta nada antes de guardar.</span></div>
+                <div><span class="lbl">Arreglo</span><span class="val">Un esquema por entidad validado en el controlador, antes de llegar al servicio. Es el cambio de mayor retorno de toda la lista.</span></div>
+            </div>
+        </article>
+
+        <article class="finding critico">
+            <div class="f-head"><span class="f-id">INT-02</span><span class="f-title">La base de datos no tiene una sola clave foránea</span><span class="pill critico">Crítico</span></div>
+            <p class="f-body">Las 69 asociaciones del proyecto declaran <code>constraints: false</code>. MySQL no rechaza un <code>viatico</code> cuyo <code>fid_memorandum</code> apunta a un memorándum inexistente, ni impide borrar un personal con vales asociados.</p>
+            <div class="f-meta">
+                <div><span class="lbl">Consecuencia</span><span class="val">Registros huérfanos en cualquier tabla, y reportes que suman sobre datos que ya no tienen padre.</span></div>
+                <div><span class="lbl">Arreglo</span><span class="val">Activarlas por dominio, empezando por viáticos y presupuesto, tras una limpieza de huérfanos existentes.</span></div>
+            </div>
+        </article>
+
+        <article class="finding alto">
+            <div class="f-head"><span class="f-id">INT-03</span><span class="f-title">Las operaciones de dinero no son atómicas</span><span class="pill alto">Alto</span></div>
+            <p class="f-body">Cero usos de <code>sequelize.transaction</code> en 44.378 líneas de backend. Un viático descuenta el presupuesto, crea el recibo y escribe el historial de gasto como tres escrituras independientes.</p>
+            <div class="f-meta">
+                <div><span class="lbl">Consecuencia</span><span class="val">Si el proceso se corta entre la primera y la tercera escritura, el presupuesto queda descontado sin recibo, o al revés. No hay reversión.</span></div>
+                <div><span class="lbl">Arreglo</span><span class="val">Envolver cada flujo de dinero en una transacción y propagarla hasta el repositorio.</span></div>
+            </div>
+        </article>
+
+        <article class="finding alto">
+            <div class="f-head"><span class="f-id">INT-04</span><span class="f-title">El esquema no exige nada: ni obligatorios ni únicos</span><span class="pill alto">Alto</span></div>
+            <p class="f-body">De 449 definiciones de columna, <code>allowNull: false</code> aparece <strong>0 veces</strong> y <code>unique</code> solo <strong>2 veces</strong>.</p>
+            <div class="f-meta">
+                <div><span class="lbl">Consecuencia</span><span class="val">Nada impide dos usuarios con el mismo correo, dos vales con el mismo código o dos roles con el mismo tipo.</span></div>
+                <div><span class="lbl">Arreglo</span><span class="val">Índices únicos en <code>usuario.email</code>, <code>usuario.username</code>, <code>role.tipo</code>, <code>vale.cod_vale</code>, <code>acta_recepcion.cod_acta</code> y <code>cites.cite_completo</code>, más <code>NOT NULL</code> en los campos que el negocio ya considera obligatorios.</span></div>
+            </div>
+        </article>
+
+        <article class="finding hecho">
+            <div class="f-head"><span class="f-id">INT-05</span><span class="f-title">Tipo de columna inválido en <code>historial_detalle_ap.gasto</code></span><span class="pill hecho">Corregido</span></div>
+            <p class="f-body">El campo usaba <code>Sequelize.NUMBER()</code>, que es la clase abstracta base de los tipos numéricos: genera el literal <code>NUMBER</code> como DDL, inválido en todos los dialectos. Impedía crear la tabla.</p>
+            <div class="f-meta">
+                <div><span class="lbl">Dónde</span><span class="val path">core/admin/apertura/historial_apertura/infra/_sql/HistorialAperturaSQLModel.ts:18</span></div>
+                <div><span class="lbl">Estado</span><span class="val">Corregido a <code>DOUBLE()</code>, coherente con los campos monetarios del modelo hermano <code>historial_gasto_ap</code>. Es un síntoma de MAN-02: sin pruebas, un tipo roto sobrevivió en el código.</span></div>
+            </div>
+        </article>
+    </div>
+
+    <h3>Funcionalidad rota — 7 hallazgos</h3>
+    <div class="ledger">
+
+        <article class="finding alto">
+            <div class="f-head"><span class="f-id">FUN-01</span><span class="f-title">El control de duplicados no hace nada</span><span class="pill alto">Alto</span></div>
+            <p class="f-body"><code>repo.exists()</code> consulta <code>this.entities</code>, un arreglo en memoria que nunca se llena desde la base. Siempre devuelve <code>false</code>, así que la comprobación “¿ya existe?” de <code>BaseService.create</code> es decorativa.</p>
+            <div class="f-meta"><div><span class="lbl">Dónde</span><span class="val path">base/infra/_sql/BaseSQLRepository.ts</span></div></div>
+        </article>
+
+        <article class="finding alto">
+            <div class="f-head"><span class="f-id">FUN-02</span><span class="f-title"><code>findAll()</code> es un esqueleto que devuelve lista vacía</span><span class="pill alto">Alto</span></div>
+            <p class="f-body">El método paginado devuelve <code>{ rows: this.entities, count: this.entities.length }</code> sobre el mismo arreglo vacío. Toda pantalla que lo use lista cero registros y muestra un total incorrecto.</p>
+        </article>
+
+        <article class="finding alto">
+            <div class="f-head"><span class="f-id">FUN-03</span><span class="f-title">Cada inicio de sesión recorre la tabla completa de usuarios</span><span class="pill alto">Alto</span></div>
+            <p class="f-body"><code>getAll()</code> sin argumentos no aplica <code>LIMIT</code>: trae la tabla entera a memoria. <code>UsuarioService.findByEmail</code> la usa y luego filtra en JavaScript con <code>.find()</code>.</p>
+            <div class="f-meta"><div><span class="lbl">Arreglo</span><span class="val">Sustituir por <code>findOne({ where: { username } })</code> con índice. Es una línea y elimina el cuello de botella.</span></div></div>
+        </article>
+
+        <article class="finding alto">
+            <div class="f-head"><span class="f-id">FUN-04</span><span class="f-title">15 de 54 entradas del menú llevan a una página inexistente</span><span class="pill alto">Alto</span></div>
+            <p class="f-body">La tabla <code>ruta</code> ofrece módulos que el frontend nunca registró. Detalle completo en la sección siguiente.</p>
+        </article>
+
+        <article class="finding medio">
+            <div class="f-head"><span class="f-id">FUN-05</span><span class="f-title">La búsqueda solo mira las primeras 5 filas</span><span class="pill medio">Medio</span></div>
+            <p class="f-body">Cuando se envía un objeto de consulta, el límite por defecto es <code>DEFAULT_QUERY_LIMIT = 5</code>. El filtro de texto <code>?q=</code> se aplica <strong>después</strong>, en JavaScript, sobre esas 5 filas ya recortadas.</p>
+            <div class="f-meta"><div><span class="lbl">Consecuencia</span><span class="val">Buscar un personal por apellido en una planilla de cientos casi siempre devuelve “sin resultados”.</span></div></div>
+        </article>
+
+        <article class="finding medio">
+            <div class="f-head"><span class="f-id">FUN-06</span><span class="f-title">Dos rutas del menú apuntan a direcciones que la aplicación no usa</span><span class="pill medio">Medio</span></div>
+            <p class="f-body">El menú envía a <code>/rrhh/vale_admin</code> y <code>/bienes/apertura</code>, pero la aplicación registra <code>/bienes/vale_admin</code> y sirve <code>Apertura.tsx</code> bajo <code>/bienes/asignacion</code>.</p>
+        </article>
+
+        <article class="finding bajo">
+            <div class="f-head"><span class="f-id">FUN-07</span><span class="f-title">Mensaje de error vacío por copiar y pegar</span><span class="pill bajo">Bajo</span></div>
+            <p class="f-body"><code>BaseService.create</code> devuelve <code>entity.error</code> cuando quien falló fue <code>exists</code>; debería devolver <code>exists.error</code>. El usuario recibe un error sin texto.</p>
+        </article>
+    </div>
+
+    <h3>Mantenibilidad — 5 hallazgos</h3>
+    <div class="ledger">
+
+        <article class="finding critico">
+            <div class="f-head"><span class="f-id">MAN-01</span><span class="f-title">No existen migraciones de base de datos</span><span class="pill critico">Crítico</span></div>
+            <p class="f-body"><code>.sequelizerc</code> apunta a <code>sequelize/migrations</code>, una carpeta que no existe. El único mecanismo de esquema es <code>sync({ force: true })</code>, que borra todas las tablas antes de recrearlas.</p>
+            <div class="f-meta">
+                <div><span class="lbl">Consecuencia</span><span class="val">En producción cada cambio de columna se hizo con <code>ALTER TABLE</code> a mano, sin historial, sin poder revertir y sin garantía de que el esquema real coincida con los modelos del código.</span></div>
+                <div><span class="lbl">Arreglo</span><span class="val">Generar una migración inicial desde el esquema actual y prohibir <code>sync({force:true})</code> fuera de desarrollo. Es la condición previa para poder evolucionar el sistema con seguridad.</span></div>
+            </div>
+        </article>
+
+        <article class="finding alto">
+            <div class="f-head"><span class="f-id">MAN-02</span><span class="f-title">Dos pruebas automatizadas en 98.000 líneas</span><span class="pill alto">Alto</span></div>
+            <p class="f-body">Solo existen <code>ProcesoTest.test.ts</code> en el backend y el <code>App.test.tsx</code> que Create React App genera por defecto.</p>
+            <div class="f-meta"><div><span class="lbl">Consecuencia</span><span class="val">Ningún cambio se puede verificar sin abrir la aplicación y probarlo a mano. Los errores llegan a producción porque no hay nada que los detenga antes.</span></div></div>
+        </article>
+
+        <article class="finding alto">
+            <div class="f-head"><span class="f-id">MAN-03</span><span class="f-title">Sin integración continua</span><span class="pill alto">Alto</span></div>
+            <p class="f-body">No hay ningún flujo automático que compile, pruebe o revise el código antes de desplegar. El despliegue es un <code>caprover deploy</code> manual.</p>
+        </article>
+
+        <article class="finding medio">
+            <div class="f-head"><span class="f-id">MAN-04</span><span class="f-title">Cero automatización de fondo</span><span class="pill medio">Medio</span></div>
+            <p class="f-body">No hay tareas programadas, colas ni procesos en segundo plano en todo el backend. Todo cambio de estado —marcar un proceso atrasado, avisar de un descargo vencido, recalcular un saldo— depende de que una persona entre y haga clic.</p>
+            <div class="f-meta"><div><span class="lbl">Oportunidad</span><span class="val">Es el punto con más recorrido del sistema. Ver la sección 07.</span></div></div>
+        </article>
+
+        <article class="finding bajo">
+            <div class="f-head"><span class="f-id">MAN-05</span><span class="f-title">Deuda técnica visible y confusión de nombres</span><span class="pill bajo">Bajo</span></div>
+            <p class="f-body">Bloques comentados extensos por todo el código, <code>this.sequelize</code> y <code>this._sequelize</code> mezclados en <code>Database.ts</code>, <code>operatorsAliases: 1</code> (opción retirada en Sequelize 5) y un login “por email” que en realidad compara contra <code>username</code> — la trampa que hace fallar cualquier cuenta nueva creada con esos dos campos distintos.</p>
+        </article>
+    </div>
+</section>
+
+<!-- ============ 06 ============ -->
+<section id="fantasma">
+    <h2><span class="num">06</span> Rutas fantasma</h2>
+    <div class="section-rule"></div>
+
+    <p>El menú se construye desde la tabla <code>ruta</code>, pero el frontend registra sus pantallas en <code>App.tsx</code>. Quince entradas existen en la primera y no en la segunda: aparecen en el menú y llevan a una página en blanco.</p>
+
+    <div class="tw">
+        <table>
+            <thead><tr><th>Entrada del menú</th><th>Ruta que abre</th><th>Estado</th><th>Qué falta</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Horario</strong></td><td class="mono">/rrhh/horario</td><td class="tag-404">404</td><td rowspan="5">Bloque completo de control de asistencia: definición de horarios, rangos, marcaje y designación por funcionario. No existe ni backend ni frontend.</td></tr>
+                <tr><td><strong>Horario Rango</strong></td><td class="mono">/rrhh/horario_rango</td><td class="tag-404">404</td></tr>
+                <tr><td><strong>Registro Horario</strong></td><td class="mono">/rrhh/registro_horario</td><td class="tag-404">404</td></tr>
+                <tr><td><strong>Designación Horario</strong></td><td class="mono">/rrhh/designacion_horario</td><td class="tag-404">404</td></tr>
+                <tr><td><strong>Configuración Horario</strong></td><td class="mono">/rrhh/config_horario</td><td class="tag-404">404</td></tr>
+                <tr><td><strong>Permiso</strong></td><td class="mono">/rrhh/permiso</td><td class="tag-404">404</td><td rowspan="2">Solicitud y designación de permisos del funcionario.</td></tr>
+                <tr><td><strong>Designar Permiso</strong></td><td class="mono">/rrhh/designacion_permiso</td><td class="tag-404">404</td></tr>
+                <tr><td><strong>Ficha</strong></td><td class="mono">/rrhh/ficha</td><td class="tag-404">404</td><td rowspan="2">Ficha del funcionario en modo autoservicio y en modo administrador.</td></tr>
+                <tr><td><strong>Ficha Admin</strong></td><td class="mono">/rrhh/ficha_admin</td><td class="tag-404">404</td></tr>
+                <tr><td><strong>Declaración</strong></td><td class="mono">/rrhh/declaracion</td><td class="tag-404">404</td><td>Declaración jurada del funcionario.</td></tr>
+                <tr><td><strong>Notificación</strong></td><td class="mono">/dashboard/notificacion</td><td class="tag-404">404</td><td>Centro de notificaciones. El menú lo promete pero no hay backend ni tabla.</td></tr>
+                <tr><td><strong>Sigapo</strong></td><td class="mono">/gabi/sigapo</td><td class="tag-404">404</td><td>Consulta al sistema externo de correspondencia. El backend existe pero apunta a URLs de ejemplo.</td></tr>
+                <tr><td><strong>Excel</strong></td><td class="mono">/viatico/archivo_excel</td><td class="tag-404">404</td><td>Exportación masiva de viáticos a Excel.</td></tr>
+                <tr><td><strong>Vale Admin</strong></td><td class="mono">/rrhh/vale_admin</td><td class="tag-404">404</td><td>La pantalla <strong>sí existe</strong>, pero registrada en <code>/bienes/vale_admin</code>. Corregir la ruta en la tabla es un <code>UPDATE</code>.</td></tr>
+                <tr><td><strong>Apertura</strong></td><td class="mono">/bienes/apertura</td><td class="tag-404">404</td><td>La pantalla <strong>sí existe</strong>, pero se sirve en <code>/bienes/asignacion</code>. También se arregla con un <code>UPDATE</code>.</td></tr>
+                <tr><td><strong>Solicitud Vacación</strong></td><td class="mono">/rrhh/solicitud_vacacion</td><td class="tag-404">parcial</td><td>Solo está registrada la variante con identificador (<code>/:id</code>); el listado no existe.</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="callout">
+        <p><strong>Dos de las quince se arreglan hoy mismo.</strong> “Vale Admin” y “Apertura” tienen la pantalla construida y funcionando; solo está mal la dirección guardada en la tabla <code>ruta</code>. Son dos sentencias <code>UPDATE</code>.</p>
+        <p>Las trece restantes son funcionalidad que nunca se construyó. Lo más honesto mientras tanto es <strong>ocultarlas del menú</strong>, para que nadie las descubra a la mala.</p>
+    </div>
+</section>
+
+<!-- ============ 07 ============ -->
+<section id="automatizar">
+    <h2><span class="num">07</span> Qué automatizar</h2>
+    <div class="section-rule"></div>
+
+    <p>Hoy el sistema es un registrador pasivo: guarda lo que la gente escribe y no hace nada por su cuenta. Los diez puntos siguientes ya tienen los datos necesarios en la base — lo único que falta es el disparador.</p>
+
+    <div class="autos">
+
+        <div class="auto">
+            <span class="idx">01</span>
+            <div>
+                <h4>Vencimientos y estados atrasados</h4>
+                <p>Las tablas <code>proceso</code>, <code>actividad</code> y <code>cites</code> ya tienen estados <code>ATRASADO</code> y <code>ATENDIDO_CON_RETRASO</code>, campos <code>dias</code> y <code>fecha_cierre</code>. Una tarea nocturna que recorra plazos, cambie el estado y avise al responsable.</p>
+                <span class="now">Hoy: alguien revisa y marca a mano. La función <code>obtenerFeriadosBolivia()</code> para calcular días hábiles ya existe y no se usa para esto.</span>
+            </div>
+            <span class="impact alto">Impacto alto</span>
+        </div>
+
+        <div class="auto">
+            <span class="idx">02</span>
+            <div>
+                <h4>Conciliación presupuestaria nocturna</h4>
+                <p>Verificar cada noche que <code>apertura_general.pagado</code> coincida con la suma de <code>historial_gasto_ap</code>, y que <code>presupuesto_vigente = inicial + mod_aprobada</code>. Reportar cualquier descuadre.</p>
+                <span class="now">Hoy: los saldos se recalculan dentro de la petición, sin transacción (INT-03). Un corte a media operación deja el presupuesto mal y nadie se entera.</span>
+            </div>
+            <span class="impact alto">Impacto alto</span>
+        </div>
+
+        <div class="auto">
+            <span class="idx">03</span>
+            <div>
+                <h4>Numeración correlativa automática</h4>
+                <p><code>cod_vale</code>, <code>cod_acta</code>, <code>cite_completo</code> y <code>nume_recibo</code> deberían generarse en el servidor, por gestión y por área, dentro de la misma transacción que crea el registro.</p>
+                <span class="now">Hoy: se arman a mano y no hay índice único (INT-04), así que dos personas trabajando a la vez pueden generar el mismo número.</span>
+            </div>
+            <span class="impact alto">Impacto alto</span>
+        </div>
+
+        <div class="auto">
+            <span class="idx">04</span>
+            <div>
+                <h4>Control de descargos vencidos</h4>
+                <p>Detectar viáticos cuyo plazo de rendición pasó, notificar al funcionario y a su jefe, y bloquear nuevas solicitudes a quien tenga descargos pendientes.</p>
+                <span class="now">Hoy: nada impide que un funcionario acumule viáticos sin rendir ninguno.</span>
+            </div>
+            <span class="impact alto">Impacto alto</span>
+        </div>
+
+        <div class="auto">
+            <span class="idx">05</span>
+            <div>
+                <h4>Notificaciones por correo y en la plataforma</h4>
+                <p>Avisos automáticos en los momentos que ya define el flujo: memorándum designado, viático listo para cobro, vacación aprobada por el jefe, proceso próximo a vencer.</p>
+                <span class="now">Hoy: el menú tiene una entrada “Notificación” que no lleva a ninguna parte (FUN-04), y <code>nodemailer</code> está instalado pero solo se usa para restablecer contraseñas.</span>
+            </div>
+            <span class="impact alto">Impacto alto</span>
+        </div>
+
+        <div class="auto">
+            <span class="idx">06</span>
+            <div>
+                <h4>Vacaciones devengadas por antigüedad</h4>
+                <p>La tabla <code>personal</code> ya guarda <code>fecha_ingreso</code>, <code>anhos_antiguedad_gador</code> y <code>anhos_antiguedad_cas</code>. Calcular automáticamente los días que corresponden según escala y descontar los aprobados.</p>
+                <span class="now">Hoy: el saldo de vacaciones se lleva por fuera del sistema.</span>
+            </div>
+            <span class="impact medio">Impacto medio</span>
+        </div>
+
+        <div class="auto">
+            <span class="idx">07</span>
+            <div>
+                <h4>Detección de consumo anómalo de combustible</h4>
+                <p>Cruzar los litros de <code>vale</code> contra la distancia registrada en <code>bitacora_viaje</code> por vehículo y marcar los rendimientos fuera de rango histórico.</p>
+                <span class="now">Hoy: ambas tablas se llenan pero nunca se comparan. Es control interno de alto valor y bajo costo.</span>
+            </div>
+            <span class="impact alto">Impacto alto</span>
+        </div>
+
+        <div class="auto">
+            <span class="idx">08</span>
+            <div>
+                <h4>Reportes programados</h4>
+                <p>Ya existen doce generadores de reportes en <code>tools/*Report.ts</code>. Falta el calendario: enviar el día 1 de cada mes el consolidado de ejecución presupuestaria y de vales a cada jefe de área.</p>
+                <span class="now">Hoy: cada reporte se genera solo si alguien entra y lo pide.</span>
+            </div>
+            <span class="impact medio">Impacto medio</span>
+        </div>
+
+        <div class="auto">
+            <span class="idx">09</span>
+            <div>
+                <h4>Respaldos verificados</h4>
+                <p><code>mysqldump</code> diario con retención, y —lo que casi nadie hace— una restauración de prueba semanal que confirme que el respaldo sirve.</p>
+                <span class="now">Hoy: no existe ninguna rutina de respaldo en el proyecto.</span>
+            </div>
+            <span class="impact alto">Impacto alto</span>
+        </div>
+
+        <div class="auto">
+            <span class="idx">10</span>
+            <div>
+                <h4>Contraste con sistemas externos</h4>
+                <p>Los procesos guardan <code>cuce</code>, el identificador único de contratación estatal. Contrastarlo periódicamente contra la fuente oficial detecta desfases entre lo registrado internamente y lo publicado.</p>
+                <span class="now">Hoy: la integración SIGAPO existe en código pero apunta a direcciones de ejemplo y nunca funcionó.</span>
+            </div>
+            <span class="impact medio">Impacto medio</span>
+        </div>
+    </div>
+
+    <div class="callout">
+        <p><strong>Todo esto necesita una sola pieza de infraestructura</strong>: un proceso planificador con registro de ejecución y reintentos, separado del servidor web. Con esa pieza en pie, cada automatización de la lista son entre 50 y 200 líneas, porque los datos ya están.</p>
+    </div>
+</section>
+
+<!-- ============ 08 ============ -->
+<section id="modulos">
+    <h2><span class="num">08</span> Módulos nuevos</h2>
+    <div class="section-rule"></div>
+
+    <p>Antes de agregar nada conviene terminar lo prometido: las trece pantallas fantasma de la sección 06, sobre todo el bloque de asistencia y horarios, que es el más grande y el que más se nota que falta. Hecho eso, estas son las incorporaciones que mejor encajan con lo que el sistema ya tiene.</p>
+
+    <div class="tw">
+        <table>
+            <thead><tr><th>Módulo</th><th>Qué resuelve</th><th>Sobre qué se apoya</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td><strong>Bitácora consultable</strong></td>
+                    <td>La tabla <code>bitacora</code> ya registra usuario, ruta, método e IP de cada petición, pero no hay pantalla para consultarla. Una vista con filtros convierte datos muertos en trazabilidad real.</td>
+                    <td class="mono">bitacora (ya se llena)</td>
+                </tr>
+                <tr>
+                    <td><strong>Portal del funcionario</strong></td>
+                    <td>Autoservicio: mis viáticos, mis vales, mis permisos, mis vacaciones, mis descargos pendientes. Descarga la mayor parte de las consultas que hoy llegan por mesa de entrada.</td>
+                    <td class="mono">viatico · vale · vacacion · descargo · personal</td>
+                </tr>
+                <tr>
+                    <td><strong>Tablero de indicadores</strong></td>
+                    <td>Ejecución presupuestaria por área y partida, procesos por estado, consumo de combustible, viáticos pendientes de descargo. Hoy el panel solo saluda y muestra la fecha.</td>
+                    <td class="mono">apertura_general · proceso · vale · viatico</td>
+                </tr>
+                <tr>
+                    <td><strong>Hoja de ruta digital</strong></td>
+                    <td>Seguimiento de un documento entre áreas de punta a punta, uniendo lo que hoy está separado en tres módulos distintos.</td>
+                    <td class="mono">cites · documento · acta_recepcion</td>
+                </tr>
+                <tr>
+                    <td><strong>Firma y sellado de actas</strong></td>
+                    <td><code>acta_recepcion</code> ya tiene un campo <code>sellado</code> booleano sin uso real. Convertirlo en un sellado con huella criptográfica y fecha da valor probatorio a los documentos.</td>
+                    <td class="mono">acta_recepcion (campo ya existe)</td>
+                </tr>
+                <tr>
+                    <td><strong>Contratos y garantías</strong></td>
+                    <td>Vencimiento de boletas de garantía y plazos contractuales con aviso anticipado. Es la continuación natural del módulo de contrataciones.</td>
+                    <td class="mono">proceso · actividad</td>
+                </tr>
+                <tr>
+                    <td><strong>Activos fijos y almacén</strong></td>
+                    <td>El único dominio administrativo clásico que falta por completo: inventario, asignación de bienes a funcionarios y bajas.</td>
+                    <td class="mono">nuevo · se apoya en personal y area</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ============ 09 ============ -->
+<section id="ruta">
+    <h2><span class="num">09</span> Hoja de ruta</h2>
+    <div class="section-rule"></div>
+
+    <p>El orden importa más que la velocidad. Automatizar sobre cimientos flojos multiplica los errores en vez de reducirlos: si el sistema acepta datos inválidos, una tarea automática los propaga a mil registros en una noche.</p>
+
+    <div class="phases">
+
+        <div class="phase now">
+            <div class="p-head"><span class="p-n">FASE 0</span><h4>Contención</h4><span class="dur">≈ 1 semana</span></div>
+            <p>Cuatro cosas que se arreglan rápido y que, hasta que no estén hechas, vuelven irrelevante todo lo demás.</p>
+            <ul>
+                <li>Eliminar o proteger <code>purgar_all</code> <span class="f-id">(SEC-01)</span></li>
+                <li>Sacar el secreto JWT del código y exigir la variable de entorno <span class="f-id">(SEC-02)</span></li>
+                <li>Aplicar el guardia de sesión a nivel de router y declarar las excepciones <span class="f-id">(SEC-03)</span></li>
+                <li>Cerrar la descarga pública de archivos <span class="f-id">(SEC-04)</span></li>
+                <li>Ocultar del menú las trece rutas sin pantalla y corregir las dos mal escritas <span class="f-id">(FUN-04, FUN-06)</span></li>
+            </ul>
+        </div>
+
+        <div class="phase">
+            <div class="p-head"><span class="p-n">FASE 1</span><h4>Cimientos</h4><span class="dur">≈ 3–4 semanas</span></div>
+            <p>Que el sistema deje de aceptar cualquier cosa. Es la fase que cambia la naturaleza del proyecto.</p>
+            <ul>
+                <li>Capa de validación por esquema en los controladores <span class="f-id">(INT-01)</span></li>
+                <li>Migración inicial y prohibición de <code>sync({force:true})</code> fuera de desarrollo <span class="f-id">(MAN-01)</span></li>
+                <li>Claves foráneas, <code>NOT NULL</code> e índices únicos, por dominio <span class="f-id">(INT-02, INT-04)</span></li>
+                <li>Transacciones en viáticos, presupuesto y vales <span class="f-id">(INT-03)</span></li>
+                <li>Verificación de permisos en el servidor <span class="f-id">(SEC-08)</span></li>
+                <li>Endurecer subida y descarga de archivos <span class="f-id">(SEC-05, SEC-06, SEC-07)</span></li>
+            </ul>
+        </div>
+
+        <div class="phase">
+            <div class="p-head"><span class="p-n">FASE 2</span><h4>Confianza</h4><span class="dur">≈ 4–6 semanas</span></div>
+            <p>Que un cambio se pueda hacer sin miedo. Sin esta fase, la anterior se degrada sola con el tiempo.</p>
+            <ul>
+                <li>Pruebas sobre los flujos de dinero: cálculo de viático, descuento de presupuesto, emisión de vale</li>
+                <li>Integración continua que compile, pruebe y revise antes de desplegar <span class="f-id">(MAN-03)</span></li>
+                <li>Corregir <code>exists</code>, <code>findAll</code>, <code>findByEmail</code> y la búsqueda <span class="f-id">(FUN-01, FUN-02, FUN-03, FUN-05)</span></li>
+                <li>Sesiones cortas con token de refresco revocable <span class="f-id">(SEC-10)</span></li>
+                <li>Cabeceras de seguridad, límite de intentos y CORS acotado <span class="f-id">(SEC-11)</span></li>
+            </ul>
+        </div>
+
+        <div class="phase">
+            <div class="p-head"><span class="p-n">FASE 3</span><h4>Automatización</h4><span class="dur">≈ 6–8 semanas</span></div>
+            <p>Aquí el sistema deja de ser un registrador y empieza a trabajar solo. Es lo que más se va a notar en el día a día.</p>
+            <ul>
+                <li>Proceso planificador con registro de ejecución y reintentos <span class="f-id">(MAN-04)</span></li>
+                <li>Respaldos verificados, primero de todo lo demás</li>
+                <li>Vencimientos, notificaciones y numeración correlativa</li>
+                <li>Conciliación presupuestaria y control de descargos vencidos</li>
+                <li>Detección de consumo anómalo de combustible y reportes programados</li>
+            </ul>
+        </div>
+
+        <div class="phase">
+            <div class="p-head"><span class="p-n">FASE 4</span><h4>Ampliación</h4><span class="dur">continuo</span></div>
+            <p>Con cimientos, pruebas y automatización, agregar módulos deja de ser riesgoso.</p>
+            <ul>
+                <li>Completar el bloque de asistencia y horarios</li>
+                <li>Bitácora consultable y tablero de indicadores</li>
+                <li>Portal del funcionario</li>
+                <li>Hoja de ruta digital, firma de actas, contratos y garantías, activos fijos</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="callout">
+        <p><strong>Si solo se pudiera hacer una cosa</strong>, sería la Fase 1: la validación por esquema más las restricciones en la base. Es lo que convierte “el sistema guarda lo que sea” en “el sistema solo guarda datos válidos”, y a partir de ahí todo lo demás —automatizar, ampliar, confiar en los reportes— se vuelve posible.</p>
+    </div>
+</section>
+
+<footer>
+    <p>Revisión realizada sobre el código fuente y un entorno local completamente aislado (<code>pagador-local-isolated</code>): base de datos ficticia, red Docker interna sin salida a internet y ninguna credencial, dirección ni dato institucional real. Ningún hallazgo se verificó contra sistemas en producción.</p>
+</footer>
+
+</main>
+</div>
+
+</body>
+</html>

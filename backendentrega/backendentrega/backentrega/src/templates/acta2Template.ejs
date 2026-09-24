@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+    <title>Document</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Para que el footer esté siempre abajo */
+        }
+        @media print {            
+            .column {
+                box-sizing: border-box;
+                position: relative;
+            }
+            .logo2 {
+                width: 150px;
+            }
+
+            .logo {
+                width: 55px;
+                height: auto;
+                margin: auto;
+            }
+
+            .qr-code {                
+                z-index: 9999;
+                padding-right: 1rem;
+            }
+            .text-center2 {
+                text-align: center;
+                position: relative;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-sans">
+    <header class="bg-gray-500 p-2 text-white">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex w-1/5">
+                <div class="mr-4 text-center">
+                    <img src="<%= assetsURL %>/logo2.png" alt="GADOR" class="w-24 h-24 mx-auto" />
+                    <p class="font-sans text-xs m-0 mt-2">Seccion de Archivos</p>
+                </div>                
+            </div>
+            <div class="w-3/5 text-center">
+                <div class="flex flex-col justify-between font-sans">
+                    <h4 class="text-lg m-0 mb-auto">Gobierno Autónomo del Departamento de Oruro</h4>
+                    <h6 class="text-sm m-0 mb-4">Secretaria Deptal. de Administración y Finanzas Publicas</h6>
+                    <h5 class="text-lg font-semibold mt-2">REPORTE DE ACTAS</h5>
+                </div>
+            </div>
+            <div class="w-1/5 text-right">
+                <img src="<%= qrCodeDataUrl %>" alt="QR Code" class="w-24 h-24 m-0 p-0 float-right">
+            </div>
+        </div>
+    </header>
+    <main class="container mx-auto mt-1 p-4 flex-grow">        
+        <table class="min-w-full bg-white border border-gray-300 text-xs font-light">
+            <thead class="border-b text-xs dark:border-neutral-500">
+                <tr>
+                    <th class="dark:border-neutral-500">#</th>
+                    <th class="dark:border-neutral-500">Cod. Acta</th>
+                    <th class="dark:border-neutral-500">Tipo</th>
+                    <th class="dark:border-neutral-500">Fecha</th>
+                    <th class="dark:border-neutral-500">Responsable</th>
+                    <th class="dark:border-neutral-500">Secretaria/Area/Unidad</th>
+                    <th class="dark:border-neutral-500">Documentos Adjuntos</th>
+                    <th class="dark:border-neutral-500">Nro Documentos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (data) { %>
+                    <% let count = 1; %>
+                    <% data.rows.forEach(function(row, index){ %>
+                        <tr>
+                            <td class="border dark:border-neutral-500 px-1 p-0"><%= count++ %></td>
+                            <td class="border dark:border-neutral-500 px-1 p-0"><%= row.cod_acta %></td>
+                            <td class="border dark:border-neutral-500 px-1 p-0"><%= row.tipo_ %></td>
+                            <td class="border dark:border-neutral-500 px-1 p-0"><%= row.fecha_registro %></td>                            
+                            <td class="border dark:border-neutral-500 px-1 p-0"><%= row.nombre %></td>                            
+                            <td class="border dark:border-neutral-500 px-1 p-0"><%= row.area %></td>                            
+                            <td class="border dark:border-neutral-500 px-1 p-0"><%= row.doc_adjunto %></td>                         
+                            <td class="border dark:border-neutral-500 px-1 p-0">
+                                <% row.documentos.forEach(function(r, index) { %>
+                                    <span><%= r.nro %>&nbsp;|&nbsp;</span><pre><%= '\n' %></pre>
+                                <% }); %>
+                            </td>
+                        </tr>                          
+                    <% }); %>
+                <% } %>                
+            </tbody>
+        </table>
+    </main>
+</body>
+
+</html>

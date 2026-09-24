@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+    <title>Document</title>
+    <style>
+        @media print {            
+            .column {
+                box-sizing: border-box;
+                position: relative;
+            }
+            .logo2 {
+                width: 150px;
+            }
+
+            .logo {
+                width: 55px;
+                height: auto;
+                margin: auto;
+            }
+
+            .qr-code {                
+                z-index: 9999;
+                padding-right: 1rem;
+            }
+            .text-center2 {
+                text-align: center;
+                position: relative;
+            }
+         
+        }
+    </style>
+</head>
+
+<body class="font-sans mx-6">    
+            <!-- Header -->
+            <header class="bg-gray-500 p-2 text-white">
+                <div class="container mx-auto flex justify-between items-center">
+                    <div class="flex w-1/5">
+                        <div class="mr-4 text-center">
+                            <img src="<%= assetsURL %>/logo2.png" alt="GADOR" class="w-24 h-24 mx-auto" />
+                            <p class="font-sans text-xs m-0 mt-2">Sección Apertura Programatica</p>
+                        </div>                
+                    </div>
+                    <div class="w-3/5 text-center">
+                        <div class="flex flex-col justify-between font-sans">
+                            <h4 class="text-lg m-0 mb-auto">Gobierno Autónomo del Departamento de Oruro</h4>
+                            <h6 class="text-sm m-0 mb-4">Secretaria Deptal. de Administración y Finanzas Publicas</h6>
+                            <h5 class="text-lg font-semibold mt-2">HISTORIAL DE APERTURA</h5>
+                            <span class="text-xs font-semibold mt-2">Oruro, <%= info.fecha_reporte %></span>
+                        </div>
+                    </div>
+                    <div class="w-1/5 text-right">
+                        <img src="<%= qrCodeDataUrl %>" alt="QR Code" class="w-24 h-24 m-0 p-0 float-right">
+                    </div>
+                </div>
+            </header>
+
+            <div class="container mx-auto flex justify-between items-center">
+                <!-- Columna Izquierda -->
+               <!-- <div class="flex w-2/5">
+                <div class="mr-4 text-center">
+                    <img src="<%= assetsURL %>/logo3.png" alt="GADOR" class="w-24 h-24 mx-auto" />
+                    <p class="font-sans text-xs m-0 mt-2">Gobierno Autónomo del Departamento de Oruro</p>
+                    <span class="text-xs">Oruro, <%= info.fecha_reporte %></span>
+                </div>                
+                </div>-->
+        
+                <!-- Columna Centro -->
+                <div class="w-4/5 text-center">
+                    <!--Columna central datos-->
+                    <div class="container mx-auto bg-gray-100 p-2 ">
+                     <!--   <div class="flex">
+                            <strong class="text-xs font-semibold">Codigo</strong>
+                            <span class="text-xs">: <%= info.cod_depart_memo %></span>
+                        </div>-->
+                        <div class="flex">
+                            <strong class="text-xs font-semibold">Apertura Programatica</strong>
+                            <span class="text-xs">: <%= info.apertura_programatica %></span>
+                        </div>
+                          <div class="flex">
+                            <strong class="text-xs font-semibold">UE</strong>
+                            <span class="text-xs">: <%= info.ue %></span>
+                        </div>
+                        <div class="flex">
+                            <strong class="text-xs font-semibold">Area Principal</strong>
+                            <span class="text-xs">: <%= info.nombre_area %></span>
+                        </div>
+                        <div class="flex">
+                            <strong class="text-xs font-semibold">Area Dependencia</strong>
+                            <span class="text-xs">: <%= info.area_hijo_id %></span>
+                        </div>
+                        <div class="flex">
+                            <strong class="text-xs font-semibold">Sigla</strong>
+                            <span class="text-xs">: <%= info.sigla_area %></span>
+                        </div>
+                          
+                        <div class="flex">
+                            <strong class="text-xs font-semibold">SISIN</strong>
+                            <span class="text-xs">: <%= info.sisin %></span>
+                        </div>
+                        <div class="flex">
+                            <strong class="text-xs font-semibold">Objeto</strong>
+                            <span class="text-xs">: <%= info.objeto_id %></span>
+                        </div>
+                        <div class="flex">
+                            <strong class="text-xs font-semibold">Descripcion Objeto</strong>
+                            <span class="text-xs">: <%= info.descripcion_objeto_gasto %></span>
+                        </div>
+                           <div class="flex">
+                            <strong class="text-xs font-semibold">Presupuesto inicial</strong>
+                            <span class="text-xs">: <%= info.presupuesto_inicial %></span>
+                        </div>
+                        <div class="flex">
+                            <strong class="text-xs font-semibold">Presupuesto Restante</strong>
+                            <span class="text-xs">: <%= info.presupuesto_restante %></span>
+                        </div>
+                          
+                         <div class="flex">
+                            <strong class="text-xs font-semibold">Estado</strong>
+                            <span class="text-xs">: <%= info.estado %></span>
+                        </div>   
+                          
+                          <div class="flex">
+                            <strong class="text-xs font-semibold">Gestion</strong>
+                            <span class="text-xs">: <%= info.gestion %></span>
+                        </div>                           
+                                               
+                            <!--<span class="text-xs">: <%= info.gestion %></span>-->
+                        </div>              
+                    </div>           
+                </div> 
+                
+            </div>
+            <svg width="100%" height="4" xmlns="http://www.w3.org/2000/svg">
+                <line x1="0" y1="2" x2="100%" y2="2" stroke="#333" stroke-width="2"/>
+            </svg>
+        <!--Parte central del texto-->
+        <div class="container mx-auto py-2">
+            <div class="container mx-auto bg-gray-100 p-2">
+                <div class="flex">
+                    <strong class="text-xs font-semibold flex-shrink-0 w-26">A.P.</strong>
+                    <span class="text-xs w-36">: <%= info.apertura_programatica%></span><!--Revisar-->
+                
+                    <strong class="text-xs font-semibold flex-shrink-0 w-26">Area</strong>
+                    <span class="text-xs w-36">: <%= info.area_hijo_id %></span><!--Revisar-->
+
+                    <strong class="text-xs font-semibold flex-shrink-0 w-26">Objeto</strong>
+                    <span class="text-xs w-36">: <%= info.objeto_id %></span><!--Revisar-->
+                    <br>                 
+                    <strong class="text-xs font-semibold flex-shrink-0 w-26">Descripcion</strong>
+                    <span class="text-xs w-36">: <%= info.descripcion_objeto_gasto %></span><!--Revisar-->
+                </div>     
+            </div>
+            <div class="container mx-auto p-2">
+                <div class="flex">
+                    <span class="text-sm">Se tiene el siguiente desglose del Historial de Gastos </span>                   
+                </div>               
+            </div>    
+        </div>
+
+        <!--Cuerpo nuevo de la tabla-->
+        <div>
+            
+            <div class="flex justify-center">
+                <table class="text-sm text-left border-collapse border border-gray-300" style="width: 100%;">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="border border-gray-300 px-2 p-0 text-center"  style="width: 120px;">Fecha</th>
+                            <th class="border border-gray-300 px-2 p-0 text-center"  style="width: 200px;">Concepto de Gasto</th>
+                            <th class="border border-gray-300 px-2 p-0 text-center"  style="width: 200px;">Descripción de Gasto</th>
+                            <th class="border border-gray-300 px-2 p-0 text-center bg-gray-200"  style="width: 80px;">Monto Egreso/Ingreso</th>
+                            <th class="border border-gray-300 px-2 p-0 text-center"  style="width: 80px;">Haber</th>
+                            <th class="border border-gray-300 px-2 p-0 text-center"  style="width: 80px;">Debe</th>
+                            <th class="border border-gray-300 px-2 p-0 text-center"  style="width: 80px;">Saldo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% let total_saldo = 0 %>
+                        <% if (data) {  %>
+                            <% data.rows.forEach(function(row){ 
+                                 total_saldo = parseFloat(row.saldo || 0) %>
+                                <tr>
+                                    <td class="border border-gray-300 px-2 p-0 text-center" style="width: 120px;font-size: 12px;"><%= row.fecha_format %></td>
+                                    <td class="border border-gray-300 px-2 p-0 text-center" style="width: 200px;font-size: 12px;"><%= row.titulo %></td>
+                                    <td class="border border-gray-300 px-2 p-0 text-center" style="width: 200px;font-size: 12px;"><%= row.descripcion %></td>
+                                    <td class="border border-gray-300 px-2 p-0 text-center bg-gray-200" style="width: 80px;font-size: 12px;"><%= row.gasto %></td>
+                                    <td class="border border-gray-300 px-2 p-0 text-center" style="width: 80px;font-size: 12px;"><%= row.haber %></td>
+                                    <td class="border border-gray-300 px-2 p-0 text-center" style="width: 80px;font-size: 12px;"><%= row.debe %></td>   
+                                    <td class="border border-gray-300 px-2 p-0 text-center" style="width: 80px;font-size: 12px;"><%= row.saldo %></td>                      
+                                </tr>                               
+                            <% }); %>                             
+                        <% } %>
+                                               
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+       <div class="text-right mt-2" style="page-break-inside: avoid;">
+        <table style="width: 100%;">
+            <tr class="bg-gray-300 font-bold" style="background-color: #ADADAD; color: black; font-weight: bold;">
+            <td colspan="6" class="text-right border border-gray-300" style="font-size: 12px">TOTAL:</td>
+            <td class="text-center border border-gray-300" style="font-size: 12px"><%= total_saldo.toFixed(2) %></td>
+            </tr>
+        </table>
+        </div>
+
+        <!---Cuerpo de la tabla -->
+        <!--<div class="container mx-auto py-2">
+            <div class="grid grid-cols-12 gap-2 text-center text-xs mb-4 leading-none">
+                <div class="border border-gray-300 px-4 p-0">Objetivo de Viaje</div>
+                <div class="border border-gray-300 px-4 p-0">Lugar</div>                
+                <div class="border border-gray-300 px-4 p-0">Vehiculo Publico y/o Oficial</div>
+                <div class="border border-gray-300 px-4 p-0">Fecha Ida</div>
+                <div class="border border-gray-300 px-4 p-0">Fecha Retorno</div>
+                <div class="border border-gray-300 px-4 p-0">Hora Partida</div>
+                <div class="border border-gray-300 px-4 p-0">Hora Retorno</div>
+            </div>
+            <div class="grid grid-cols-12 gap-2 text-center text-xs">
+                <% if (data) { %>
+                    <% data.rows.forEach(function(row){ %>
+                        <div class="border border-gray-300 px-4 p-0"><%= row.objetivo_viaje %></div>
+                        <div class="border border-gray-300 px-4 p-0"><%= row.destino_reg %></div>
+                        <div class="border border-gray-300 px-4 p-0"><%= row.tipo_vehiculo_op %></div>
+                        <div class="border border-gray-300 px-4 p-0"><%= row.fecha_dia %></div>
+                        <div class="border border-gray-300 px-4 p-0"><%= row.fecha_dia %></div>
+                        <div class="border border-gray-300 px-4 p-0"><%= row.hora_inicio %></div>
+                        <div class="border border-gray-300 px-4 p-0"><%= row.hora_fin %></div>
+                    
+                    <% }); %>
+                <% } %>           
+            </div>    
+        </div>        -->
+
+
+        <!--Parte final del texto-->
+        <div class="container mx-auto py-2">
+                <div >
+                    <span class="text-sm">Informe Detallado <br> </span>
+                    
+                <div>
+                    <span class="text-xs"><%= info.cod_depart_memo %><br></span>
+                   <!-- <span class="text-xs">cc.RRHH<br></span>
+                    <span class="text-xs">cc.ARCH</span>   -->         
+                </div>
+            </div>
+        </div>
+
+    </main>
+</body>
+
+</html>

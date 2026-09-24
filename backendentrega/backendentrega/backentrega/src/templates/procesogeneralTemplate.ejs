@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+    <title>Document</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Para que el footer esté siempre abajo */
+        }
+        @media print {            
+            .column {
+                box-sizing: border-box;
+                position: relative;
+            }
+            .logo2 {
+                width: 150px;
+            }
+
+            .logo {
+                width: 55px;
+                height: auto;
+                margin: auto;
+            }
+
+            .qr-code {                
+                z-index: 9999;
+                padding-right: 1rem;
+            }
+            .text-center2 {
+                text-align: center;
+                position: relative;
+            }
+        }
+        .gantt-bar {
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+        }
+        .day {
+            display: inline-block;
+            width: calc(100% / 30);
+            border-right: 1px solid #ddd;
+            font-size: 10px;
+        }
+        .day:last-child {
+            border-right: none;
+        }
+        .text-xxs {
+            font-size: 0.5rem; 
+            line-height: 0.75rem; 
+        }
+        .text-smallest {
+            font-size: 0.625rem; 
+            line-height: 0.75rem; 
+        }
+    </style>
+</head>
+
+<body>
+    <header class="p-2">
+        <div class="container mx-auto flex justify-between items-center">
+            <!-- Columna Izquierda -->
+            <div class="flex w-1/5">
+                <div class="mr-4 text-center">
+                    <img src="<%= assetsURL %>/logo3.png" alt="background" class="w-24 h-24 mx-auto" />
+                    <p class="font-sans text-xs m-0 mt-2">Area de Contrataciones</p>                    
+                </div>                
+            </div>
+    
+            <!-- Columna Centro -->
+            <div class="w-3/5 text-center">
+                <div class="flex flex-col justify-between font-sans">
+                    <h4 class="text-lg m-0 mb-auto">Gobierno Autónomo del Departamento de Oruro</h4>
+                    <h6 class="text-sm m-0 mb-4">Secretaria Deptal. de Administración y Finanzas Publicas</h6>
+                    <h5 class="text-lg font-semibold mt-2">REPORTE PROCESO DE CONTRATACIÓN</h5>
+                </div>
+            </div>
+    
+            <!-- Columna Derecha -->
+            <div class="w-1/5 text-right text-xs">
+                <span class="font-mono font-thin"><%= data.cod_acta %></span>
+                <img src="<%= qrCodeDataUrl %>" alt="QR Code" class="w-24 h-24 mx-auto">                
+            </div>
+        </div>
+    </header>
+    <main class="container mx-auto mt-1 flex-grow">
+        <div class="">
+            <p class="text-sm text-right font-light"><%= info.fecha %></p>
+        </div>        
+        <div class="container mx-auto py-2">
+            <div class="grid grid-cols-12 gap-2 text-center text-xs mb-4 leading-none">
+                <div class="col-span-2 font-semibold bg-gray-200">Area</div>
+                <div class="col-span-2 font-semibold bg-gray-200">Objeto Contratacion</div>           
+                <div class="col-span-1 font-semibold bg-gray-200 ">Fecha Inicio</div>
+                <div class="col-span-2 font-semibold bg-gray-200">paso <br>Tec. Contratacion</div>
+                <div class="col-span-2 font-semibold bg-gray-200">Paso RPA/TES</div>
+                <div class="col-span-2 font-semibold bg-gray-200">paso <br>Tec. Juridico</div>
+                <div class="col-span-1 font-semibold bg-gray-200">Estado</div>
+            </div>
+            <div class="grid grid-cols-12 gap-2 text-smallest">
+                <% if (data) { %>
+                    <% let count = 1; let sw = true; %>
+					<% data.rows.forEach(function(row){ %>
+                        <div class="col-span-2"><%= row.area %></div>
+                        <div class="col-span-2"><%= row.objeto_contratacion %></div>
+                        <div class="col-span-1 text-center"><%= row.fecha %></div>
+                        <div class="col-span-2">
+                            <% row.pasos_tc.forEach(function(r){ %>
+                                <p>
+                                    <%=r.paso%> :
+                                    <% if (r.estado=="PENDIENTE") { %>
+                                    <span class="text-center text-gray-500 text-smallest">PENDIENTE</span>
+                                    <% } if(r.estado=="ATENDIDO") { %>
+                                    <span class="text-center text-blue-500 text-smallest">ATENDIDO</span>
+                                    <% } if(r.estado=="EN_PROCESO") { %>
+                                    <span class="text-center text-yellow-500 text-smallest">EN PROCESO</span>
+                                    <% } if(r.estado=="ATRASADO") { %>
+                                    <span class="text-center text-red-500 text-smallest">ATRASADO</span>
+                                    <% } if(r.estado=="SUSPENDIDO") { %>
+                                    <span class="text-center text-orange-500 text-smallest">SUSPENDIDO</span>                                    
+                                    <% } if(r.estado=="ATENDIDO_CON_RETRASO") { %>
+                                    <span class="text-center text-green-500 text-smallest">ATEN RETRASO</span>
+                                    <% } %>
+                                </p>                                
+                            <% }); %>
+                        </div>
+                        <div class="col-span-2">
+                            <% row.pasos_tes.forEach(function(r){ %>
+                                <p>
+                                    <%=r.paso%> :
+                                    <% if (r.estado=="PENDIENTE") { %>
+                                    <span class="text-center text-gray-500 text-smallest">PENDIENTE</span>
+                                    <% } if(r.estado=="ATENDIDO") { %>
+                                    <span class="text-center text-blue-500 text-smallest">ATENDIDO</span>
+                                    <% } if(r.estado=="EN_PROCESO") { %>
+                                    <span class="text-center text-yellow-500 text-smallest">EN PROCESO</span>
+                                    <% } if(r.estado=="ATRASADO") { %>
+                                    <span class="text-center text-red-500 text-smallest">ATRASADO</span>
+                                    <% } if(r.estado=="SUSPENDIDO") { %>
+                                    <span class="text-center text-orange-500 text-smallest">SUSPENDIDO</span>                                    
+                                    <% } if(r.estado=="ATENDIDO_CON_RETRASO") { %>
+                                    <span class="text-center text-green-500 text-smallest">ATEN RETRASO</span>
+                                    <% } %>
+                                </p>                                
+                            <% }); %>
+                        </div>
+                        <div class="col-span-2">
+                            <% row.pasos_tj.forEach(function(r){ %>
+                                <p>
+                                    <%=r.paso%> :
+                                    <% if (r.estado=="PENDIENTE") { %>
+                                    <span class="text-center text-gray-500 text-smallest">PENDIENTE</span>
+                                    <% } if(r.estado=="ATENDIDO") { %>
+                                    <span class="text-center text-blue-500 text-smallest">ATENDIDO</span>
+                                    <% } if(r.estado=="EN_PROCESO") { %>
+                                    <span class="text-center text-yellow-500 text-smallest">EN PROCESO</span>
+                                    <% } if(r.estado=="ATRASADO") { %>
+                                    <span class="text-center text-red-500 text-smallest">ATRASADO</span>
+                                    <% } if(r.estado=="SUSPENDIDO") { %>
+                                    <span class="text-center text-orange-500 text-smallest">SUSPENDIDO</span>                                    
+                                    <% } if(r.estado=="ATENDIDO_CON_RETRASO") { %>
+                                    <span class="text-center text-green-500 text-smallest">ATEN RETRASO</span>
+                                    <% } %>
+                                </p>                                
+                            <% }); %>
+                        </div>
+                        <div class="col-span-1 mt-2">
+                            <% if (row.estado=="ABIERTO") { %>
+                            <span class="p-1 border border-green-500 rounded text-center text-green-500 text-smallest w-17">ABIERTO</span>                           
+                            <% } if(row.estado=="CERRADO") { %>
+                            <span class="p-1 border border-red-500 rounded text-center text-red-500 text-smallest w-17">CERRADO</span>
+                            <% } if(row.estado=="SUSPENDIDO") { %>
+                            <span class="p-1 border border-orange-500 rounded text-center text-orange-500 text-smallest w-17">SUSPENDIDO</span>                                    
+                            <% } %>
+                        </div>                                           
+                    <% }); %>
+                <% } %>           
+            </>            
+        </div>        
+    </main>    
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+// Para la interacción con el servicio (backend).
+// Colocar 'http://localhost:8080/api' para entornos de desarrollo.
+
+// Si se define REACT_APP_API_URL (p.ej. en un archivo .env.local que no se
+// versiona) se usa ese valor; en cualquier otro entorno se mantiene el valor
+// de ejemplo original.
+export const API_URL = process.env.REACT_APP_API_URL || 'http://api-ejemplo.local/api'; // EJEMPLO
+
+// Para almacenamiento
+export const STORAGE_URL = `${API_URL}/storage/file`;
+
+// API KEY obtener desde TinyMCE
+export const EDITOR_API_KEY = 'API_KEY_DE_EJEMPLO';
+
+// Para el diálogo Acerca de
+export const SUPPORT_EMAIL = '';
+
+export const WEB_CLIENT_URL = 'http://web-client-ejemplo.local';
+
+// URL para el envío de logs (deriva de API_URL; mismo valor por defecto que antes)
+export const LOG_URL = `${API_URL}/help/log`;
+
+export const GOOGLE_MAPS_API_KEY = 'GOOGLE_MAPS_API_KEY_DE_EJEMPLO';
+
+export const TOKEN_KEY = 'TOKEN_KEY_DE_EJEMPLO';
+
+/*
+AGETIC
+*/
+
+// const URL_ = WEB_CLIENT_URL + "/callback";
+
+const URL_ = "http://localhost:3000/callback";
+
+export const MI_AUTH_URL = "https://auth-ejemplo.local";
+
+export const LOGOUT_URL = "https://auth-ejemplo.local/logout";
+
+export const CLIENT_ID = "CLIENT_ID_DE_EJEMPLO";
+
+export const REDIRECT_URI = encodeURIComponent(URL_);
+
+export const AUTH_URL =
+    MI_AUTH_URL +
+    "?response_type=code&client_id=" + CLIENT_ID +
+    "&redirect_uri=" + REDIRECT_URI +
+    "&scope=openid%20profile%20offline_access%20email%20celular%20fecha_nacimiento";

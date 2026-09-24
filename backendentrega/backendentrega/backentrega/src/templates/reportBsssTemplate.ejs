@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+    <title>Document</title>
+    <style>
+        @media print {            
+            .column {
+                box-sizing: border-box;
+                position: relative;
+            }
+            .logo2 {
+                width: 150px;
+            }
+
+            .logo {
+                width: 55px;
+                height: auto;
+                margin: auto;
+            }
+
+            .qr-code {                
+                z-index: 9999;
+                padding-right: 1rem;
+            }
+            .text-center2 {
+                text-align: center;
+                position: relative;
+            }
+            .text-smallest {
+                font-size: 0.625rem; 
+                line-height: 0.75rem; 
+            }
+        }
+    </style>
+</head>
+
+<body class="font-sans">    
+    <!-- Header -->
+    <header class="p-2">
+        <div class="container mx-auto flex justify-between items-center">
+            <!-- Columna Izquierda -->
+            <div class="flex w-1/5">
+                <div class="mr-4 text-center">
+                    <img src="<%= assetsURL %>/logo3.png" alt="background" class="w-24 h-24 mx-auto" />
+                    <p class="font-sans text-xs m-0 mt-2">Seccion de Bienes y Servicios</p>                    
+                </div>                
+            </div>
+    
+            <!-- Columna Centro -->
+            <div class="w-3/5 text-center">
+                <div class="flex flex-col justify-between font-sans">
+                    <h4 class="text-lg m-0 mb-auto">Gobierno Autónomo del Departamento de Oruro</h4>
+                    <h6 class="text-sm m-0 mb-4">Secretaria Deptal. de Administración y Finanzas Publicas</h6>
+                    <h5 class="text-lg font-semibold mt-2">REPORTE DE VALES DE COMBUSTIBLE</h5>
+                </div>
+            </div>
+    
+            <!-- Columna Derecha -->
+            <div class="w-1/5 text-right text-xs">
+                <img src="<%= qrCodeDataUrl %>" alt="QR Code" class="w-24 h-24 mx-auto">                
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto mt-1 flex-grow">
+        <div class="mb-6 mt-1">
+            <p class="text-right mb-3 text-sm font-light"><%= info.fecha %></p> 
+        </div>
+        <% if (!info.is_superadmin) { %>
+            <div class="relative">
+                <div class="container mx-auto bg-gray-100 p-2">
+                    <div class="flex">
+                        <strong class="text-xs font-semibold flex-shrink-0 w-36">Nombre del responsable</strong>
+                        <span class="text-xs">:<%= info.nombre %></span>
+                    </div> 
+                    <div class="flex">
+                        <strong class="text-xs font-semibold">Cargo</strong>
+                        <span class="text-xs">: <%= info.cargo %></span>
+                    </div>               
+                </div>
+                <div class="absolute bottom-0 right-0 bg-gray-100 p-2">
+                    <!-- FORMULARIO 500 -->
+                </div>
+            </div>
+        <% } %>
+        <div class="container mx-auto py-2">
+            <div class="grid grid-cols-12 gap-2 text-center text-xs mb-4 leading-none">
+                <div class="col-span-1 font-semibold bg-gray-200">#</div>
+                <div class="col-span-2 font-semibold bg-gray-200">Cod. Vale</div>
+                <div class="col-span-3 font-semibold bg-gray-200">Apertura Prog.</div>                
+                <div class="col-span-1 font-semibold bg-gray-200">Fecha Carga</div>
+                <div class="col-span-1 font-semibold bg-gray-200">Placa</div>
+                <div class="col-span-1 font-semibold bg-gray-200">Litros</div>
+                <div class="col-span-1 font-semibold bg-gray-200">Precio</div>
+                <div class="col-span-2 font-semibold bg-gray-200">Estado</div>
+            </div>
+            <div class="grid grid-cols-12 gap-2 text-center text-smallest">
+                <% if (data) { %>
+                    <% let count = 1; %>
+					<% data.rows.forEach(function(row){ %>
+                        <div class="col-span-1"><%= count++ %></div>
+                        <div class="col-span-2 text-left"><%= row.cod_vale %></div>
+                        <div class="col-span-3 text-left"><%= row.apertura %></div>
+                        <div class="col-span-1"><%= row.fecha_carga %></div>
+                        <div class="col-span-1"><%= row.placa %></div>
+                        <div class="col-span-1"><%= row.litros %></div>
+                        <div class="col-span-1 text-right"><%= row.precio %></div>
+                        <div class="col-span-2">
+                            <% if (row.estado=="PENDIENTE") { %>
+                            <div class="p-1 border border-gray-500 rounded text-center text-gray-500 text-smallest w-17"><%=row.estado%></div>
+                            <% } if(row.estado=="APROBADO") { %>
+                            <div class="p-1 border border-green-500 rounded text-center text-green-500 text-smallest w-17"><%=row.estado%></div>
+                            <% } if(row.estado=="RECHAZADO") { %>
+                            <div class="p-1 border border-yellow-500 rounded text-center text-yellow-500 text-smallest w-17"><%=row.estado%></div>
+                            <% } if(row.estado=="ANULADO") { %>
+                            <div class="p-1 border border-red-500 rounded text-center text-red-500 text-smallest w-17"><%=row.estado%></div>
+                            <% }  %>
+                        </div>                        
+                    <% }); %>
+                <% } %>           
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

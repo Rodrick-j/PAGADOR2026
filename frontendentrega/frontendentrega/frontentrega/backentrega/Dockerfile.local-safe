@@ -1,0 +1,33 @@
+FROM node:18-bookworm-slim AS build
+
+WORKDIR /app
+
+# La instalacion local no necesita descargar Chromium durante el build.
+ENV PUPPETEER_SKIP_DOWNLOAD=true
+
+COPY package.json package-lock.json ./
+RUN npm ci --ignore-scripts
+
+COPY tsconfig.json ./
+COPY src ./src
+
+# El contenedor local nunca compila el seeder original de usuarios.
+COPY local-safe-overrides/seeders/usuario.ts ./src/seeders/usuario.ts
+RUN npm run build
+RUN npm prune --omit=dev --ignore-scripts
+
+FROM node:18-bookworm-slim AS runtime
+
+WORKDIR /app
+
+ENV NODE_ENV=development
+ENV PUPPETEER_SKIP_DOWNLOAD=true
+
+COPY --from=build /app/package.json /app/package-lock.json ./
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/build ./build
+COPY local-safe-overrides/create-local-user.cjs ./local-safe/create-local-user.cjs
+
+EXPOSE 8080
+
+CMD ["node", "build/server.js"]

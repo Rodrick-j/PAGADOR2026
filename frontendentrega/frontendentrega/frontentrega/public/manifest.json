@@ -1,0 +1,58 @@
+{
+    "short_name": "PAGADOR",
+    "name": "Gobierno Autonomo Deptal de Oruro",
+    "icons": [
+        {
+            "src": "favicon.ico",
+            "sizes": "64x64 32x32 24x24 16x16",
+            "type": "image/x-icon"
+        },
+        {
+            "src": "static/images/ic_stat_mono.png",
+            "type": "image/png",
+            "sizes": "96x96"
+        },
+        {
+            "src": "static/images/maskable_icon_x48.png",
+            "type": "image/png",
+            "sizes": "48x48"
+        },
+        {
+            "src": "static/images/maskable_icon_x72.png",
+            "type": "image/png",
+            "sizes": "72x72"
+        },
+        {
+            "src": "static/images/maskable_icon_x96.png",
+            "type": "image/png",
+            "sizes": "96x96"
+        },
+        {
+            "src": "static/images/maskable_icon_x128.png",
+            "type": "image/png",
+            "sizes": "128x128"
+        },
+        {
+            "src": "static/images/maskable_icon_x192.png",
+            "type": "image/png",
+            "sizes": "192x192",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "static/images/maskable_icon_x384.png",
+            "type": "image/png",
+            "sizes": "384x384"
+        },
+        {
+            "src": "static/images/maskable_icon_x512.png",
+            "type": "image/png",
+            "sizes": "512x512",
+            "purpose": "any maskable"
+        }
+    ],
+    "description": "P.A.GADOR",
+    "start_url": ".",
+    "display": "standalone",
+    "theme_color": "#f9fafb",
+    "background_color": "#660000"
+}

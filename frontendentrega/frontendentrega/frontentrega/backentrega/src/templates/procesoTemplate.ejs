@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+    <title>Document</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Para que el footer esté siempre abajo */
+        }
+        @media print {            
+            .column {
+                box-sizing: border-box;
+                position: relative;
+            }
+            .logo2 {
+                width: 150px;
+            }
+
+            .logo {
+                width: 55px;
+                height: auto;
+                margin: auto;
+            }
+
+            .qr-code {                
+                z-index: 9999;
+                padding-right: 1rem;
+            }
+            .text-center2 {
+                text-align: center;
+                position: relative;
+            }
+        }
+        .gantt-bar {
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+        }
+        .day {
+            display: inline-block;
+            width: calc(100% / 30);
+            border-right: 1px solid #ddd;
+            font-size: 10px;
+        }
+        .day:last-child {
+            border-right: none;
+        }
+        .text-xxs {
+            font-size: 0.5rem; 
+            line-height: 0.75rem; 
+        }
+        .text-smallest {
+            font-size: 0.625rem; 
+            line-height: 0.75rem; 
+        }
+    </style>
+</head>
+
+<body>
+    <header class="p-2">
+        <div class="container mx-auto flex justify-between items-center">
+            <!-- Columna Izquierda -->
+            <div class="flex w-1/5">
+                <div class="mr-4 text-center">
+                    <img src="<%= assetsURL %>/logo3.png" alt="background" class="w-24 h-24 mx-auto" />
+                    <p class="font-sans text-xs m-0 mt-2">Area de Contrataciones</p>                    
+                </div>                
+            </div>
+    
+            <!-- Columna Centro -->
+            <div class="w-3/5 text-center">
+                <div class="flex flex-col justify-between font-sans">
+                    <h4 class="text-lg m-0 mb-auto">Gobierno Autónomo del Departamento de Oruro</h4>
+                    <h6 class="text-sm m-0 mb-4">Secretaria Deptal. de Administración y Finanzas Publicas</h6>
+                    <h5 class="text-lg font-semibold mt-2">REPORTE PROCESO DE CONTRATACIÓN</h5>
+                </div>
+            </div>
+    
+            <!-- Columna Derecha -->
+            <div class="w-1/5 text-right text-xs">
+                <span class="font-mono font-thin"><%= data.cod_acta %></span>
+                <img src="<%= qrCodeDataUrl %>" alt="QR Code" class="w-24 h-24 mx-auto">                
+            </div>
+        </div>
+    </header>
+    <main class="container mx-auto mt-1 flex-grow">
+        <div class="relative">
+            <div class="container mx-auto bg-gray-100 p-2">
+                <div class="flex">
+                    <strong class="text-xs font-semibold flex-shrink-0 w-36">Nombre del proceso</strong>
+                    <span class="text-xs">: <%= info.objeto %></span>
+                </div>
+                <div class="flex">
+                    <strong class="text-xs font-semibold flex-shrink-0 w-36">Fecha</strong>
+                    <span class="text-xs">: <%= info.fecha_inicio %></span>
+                </div>
+                <div class="flex">
+                    <strong class="text-xs font-semibold flex-shrink-0 w-36">CUCE</strong>
+                    <span class="text-xs">: <%= info.cuce %></span>
+                </div>
+                <div class="flex">
+                    <strong class="text-xs font-semibold flex-shrink-0 w-36">Modalidad</strong>
+                    <span class="text-xs">: <%= info.modalidad %></span>
+                </div>
+                <div class="flex">
+                    <strong class="text-xs font-semibold flex-shrink-0 w-36">Código</strong>
+                    <span class="text-xs">: <%= info.codigo %></span>
+                </div>
+                <div class="flex">
+                    <strong class="text-xs font-semibold flex-shrink-0 w-36">Hoja de Ruta</strong>
+                    <span class="text-xs">: <%= info.hoja_ruta %></span>
+                </div>
+                <div class="flex">
+                    <strong class="text-xs font-semibold flex-shrink-0 w-36">Gestión</strong>
+                    <span class="text-xs">: <%= info.gestion %></span>
+                </div>
+                <div class="flex">
+                    <strong class="text-xs font-semibold flex-shrink-0 w-36">Responsable</strong>
+                    <span class="text-xs">: <%= info.responsable %></span>
+                </div>
+                <div class="flex">
+                    <strong class="text-xs font-semibold flex-shrink-0 w-36">Solicitante</strong>
+                    <span class="text-xs">: <%= info.solicitante %></span>
+                </div>
+            </div>
+            <div class="absolute bottom-0 right-0 bg-gray-100 p-2">
+                <!-- FORMULARIO 500 -->
+            </div>
+        </div>
+        <div class="container mx-auto py-2">
+            <div class="grid grid-cols-12 gap-2 text-center text-xs mb-4 leading-none">
+                <div class="col-span-1 font-semibold bg-gray-200 pt-2">Paso</div>
+                <div class="col-span-5 font-semibold bg-gray-200 pt-2">Actividad</div>                
+                <div class="col-span-1 font-semibold bg-gray-200 pt-1">Fecha Inicio</div>
+                <div class="col-span-3 font-semibold bg-gray-200 pt-2">Responsable</div>
+                <div class="col-span-1 font-semibold bg-gray-200">Fecha Enviada</div>
+                <div class="col-span-1 font-semibold bg-gray-200 pt-2">Estado</div>
+            </div>
+            <div class="grid grid-cols-12 gap-2 text-center text-smallest">
+                <% if (data) { %>
+					<% data.rows.forEach(function(row){ %>
+                        <div class="col-span-1"><%= row.paso %></div>
+                        <div class="col-span-5 text-left"><%= row.titulo %></div>
+                        <div class="col-span-1"><%= row.fecha %></div>
+                        <div class="col-span-3"><%= row.responsable %></br><%= row.responsable2 %></div>
+                        <div class="col-span-1"><%= row.fecha_envio %></div>
+                        <div class="col-span-1">
+                            <% if (row.estado=="PENDIENTE") { %>
+                            <div class="p-1 border border-gray-500 rounded text-center text-gray-500 text-smallest w-17"><%=row.estado%></div>
+                            <% } if(row.estado=="ATENDIDO") { %>
+                            <div class="p-1 border border-blue-500 rounded text-center text-blue-500 text-smallest w-17"><%=row.estado%></div>
+                            <% } if(row.estado=="EN_PROCESO") { %>
+                            <div class="p-1 border border-yellow-500 rounded text-center text-yellow-500 text-smallest w-17"><%=row.estado%></div>
+                            <% } if(row.estado=="ATRASADO") { %>
+                            <div class="p-1 border border-red-500 rounded text-center text-red-500 text-smallest w-17"><%=row.estado%></div>
+                            <% } if(row.estado=="SUSPENDIDO") { %>
+                            <div class="p-1 border border-gray-400 rounded text-center text-gray-400 text-smallest w-17"><%=row.estado%></div>
+                            <% } %>
+                        </div>
+                    <% }); %>
+                <% } %>           
+            </div>
+            <div style="page-break-before: always;"></div>
+            <div class="max-w-4xl mx-auto">
+                <h1 class="text-2xl font-bold mb-4">Linea Temporal del Proceso</h1>
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <div class="grid grid-cols-12 gap-2 text-center text-xs mb-4 leading-none">
+                        <div class="col-span-3 font-semibold bg-gray-200 pt-1 pb-1">Paso</div>
+                        <div class="col-span-6 font-semibold bg-gray-200 pt-1">Dias de realizacion de actividad</div>                
+                        <div class="col-span-3 font-semibold bg-gray-200 pt-1">Fecha Envio</div>
+                    </div>
+                  <div class="mt-4">
+                    <div class="flex flex-col space-y-4">
+                      <% data.tasks.forEach(function(task) { %>
+                        <div class="flex items-center">
+                            <div class="col-span-3 text-smallest mr-2">
+                                <%= task.name %>
+                            </div>
+                            <div class="relative flex-grow h-6 bg-gray-200 rounded">
+                                <div style="width: <%= (task.days * 5) %>%;"
+                                    class="absolute top-0 left-0 h-full bg-blue-500 rounded text-center text-white text-smallest">
+                                    <%=task.days%> dias
+                                </div>
+                            </div>
+                            <div class="col-span-3 text-smallest ml-2 text-left">
+                                <%= task.fecha_envio %></br>
+                                <% if (task.estado=="ATRASADO" ) { %>
+                                    <span class="text-red-700">
+                                        <%= task.fecha_limite %>
+                                    </span>
+                                <% } %>
+                            </div>
+                        </div>
+                      <% }); %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div>        
+    </main>    
+</body>
+
+</html>

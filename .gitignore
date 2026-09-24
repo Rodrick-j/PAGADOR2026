@@ -1,0 +1,29 @@
+# ---------------------------------------------------------------
+# .gitignore de la raiz de PAGADOR
+# Se suma a los .gitignore de backend/ y frontend/ (no los reemplaza).
+# ---------------------------------------------------------------
+
+# Dependencias y builds
+node_modules/
+build/
+
+# Datos REALES de produccion: dumps y backups de base de datos.
+# Contienen datos personales y de pagos del GAD Oruro. No subir a GitHub.
+*.sql
+*.dump
+local-safe-backups/
+
+# Secretos y configuracion local
+# (el .gitignore del backend solo ignoraba ".env", no ".env.local")
+.env
+.env.*
+!.env.example
+.npmrc
+.npmrc.*
+*.DO_NOT_USE
+_private_quarantine/
+
+# Sistema operativo / editor
+.DS_Store
+Thumbs.db
+.vscode/

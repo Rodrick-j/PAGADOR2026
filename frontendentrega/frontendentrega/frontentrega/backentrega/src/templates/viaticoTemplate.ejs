@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+    <title>Document</title>
+    <style>
+        @media print { 
+                   
+            .column {
+                box-sizing: border-box;
+                position: relative;
+            }
+            .logo2 {
+                width: 150px;
+            }
+
+            .logo {
+                width: 55px;
+                height: auto;
+                margin: auto;
+            }
+
+            .qr-code {                
+                z-index: 9999;
+                padding-right: 1rem;
+            }
+            .text-center2 {
+                text-align: center;
+                position: relative;
+            }
+            .text-xxs {
+                font-size: 8px;
+                line-height: 1; /* Elimina interlineado extra */
+                margin: 0;
+            }
+            .text-xxxs {
+                font-size: 6px;
+                line-height: 1; /* Elimina interlineado extra */
+                margin: 0;
+            }
+
+            body {
+                margin-left: 1cm;
+            }
+
+        }
+    </style>
+</head>
+
+<body class="font-sans">    
+    <!-- Header -->
+    <header class="p-5 text-black leading-none">
+        <div class="container mx-auto flex justify-between items-center leading-none">
+          <!-- Columna Izquierda -->
+          <div class="flex w-3/5">
+            <!-- Imagen alineada a la izquierda -->
+                <img src="<%= assetsURL %>/logo3.png" alt="GADOR" class="w-12 h-12 mr-2" />
+
+                <!-- Texto centrado verticalmente respecto a la imagen -->
+                <div class="flex flex-col justify-center text-center w-full">
+                    <p class="font-sans text-xxs leading-none m-0">GOBIERNO AUTONOMO DEPARTAMENTAL DE ORURO</p>
+                    <p class="font-sans text-xxs leading-none m-0">SECRETARIA DEPARTAMENTAL DE ADMINISTRACION Y FINANZAS</p>
+                    <p class="font-sans text-xxs leading-none m-0">AREA TESORERIA</p>
+                </div>        
+          </div>
+    
+            <!-- Columna Centro -->
+          
+    
+            <!-- Columna Derecha -->
+            <div class="w-4/5 text-left">
+                <div class="text-left">
+                  <!--<img src="<%= qrCodeDataUrl %>" alt="QR Code" class="w-10 h-10 mx-auto"/>--> 
+                   <p class="text-xxs font-bold">FECHA: <%= info.fecha_pago_viatico %></p>
+                   <p class="text-xxs font-bold">USUARIO: <%= info.usuario_a_cargo %></p>
+                </div>   
+            </div>
+            
+        </div>
+    </header>
+
+    <div class="container mx-auto leading-none">
+        <div class="flex">
+            <span class="text-sm">SE ENTREGO A</span>
+            <span class="text-sm">: <%= info.usuario_nombre %></span> 
+            <br>
+        </div>
+        <div class="text-sm leading-none">
+            <span class="text-sm">LA SUMA DE</span>
+            <span class="text-sm">: BS.  <%= info.liquido_pagable%>.-</span>
+            <p class="text-xs  leading-none m-0 mt-1" style="margin-left: 2cm;">: <%= info.estado_recibo%> 00/100 Bolivianos.</p>
+        </div>
+       <br>
+        <div class="text-xs leading-none">
+            <span>FECHA DE COMISION:</span>
+            <span><%= info.fecha_inicio_viaje %> AL <%= info.fecha_fin_viaje %></span>
+            <br>
+            <span>LUGAR DE COMISION:</span>
+            <span><%= info.destino %></span>
+            <br>
+            <span>MEMORANDUM:</span>
+            <span><%= info.cod_depart_memo %></span>
+        </div>
+        <br>          
+      
+         <div>
+            <p  class="font-sans text-xxs leading-none m-0 mt-1">EL INFORME DE COMISION DEBERA SER PRESENTADO DENTRO DE LOS OCHO DIAS HABILES, CASO</p>
+            <p  class="font-sans text-xxs leading-none m-0 mt-1">CONTRARIO SE PROCEDERA AL DESCUENTO EN SU HABER CONFORME A REGLAMENTO DE</p>
+            <p  class="font-sans text-xxs leading-none m-0 mt-1">VIATICOS EN VIGENCIA.</p>
+        </div>
+       
+    </div>    
+</div>
+
+    <div class="flex justify-between items-start text-xs py-6 w-full">
+  
+            <!-- Bloque de texto alineado a la izquierda -->
+            <div class="flex flex-col w-fit text-center">
+            <p class="text-sm">___________________________________</p>     
+            <p class="text-xs">FIRMA - RECIBÍ CONFORME</p>        
+            <p class="text-xs"><%= info.usuario_nombre %></p>         
+            <p class="text-xs">C.I: <%= info.ci %></p>
+            </div>
+            
+            <!-- Imagen alineada a la derecha -->
+            <div class="w-fit ml-auto mr-auto">
+             <!--<img src="<%= qrCodeDataUrl %>" alt="QR Code" class="w-16 h-16" />-->
+            <p class="text-xxxs ">: <%= info.memorandum_id%> </p>
+            <p class="text-xxxs ">: <%= info.id%> </p>
+            </div>
+  
+  </div>
+  
+     
+</div>
+
+    </main>
+</body>
+
+</html>

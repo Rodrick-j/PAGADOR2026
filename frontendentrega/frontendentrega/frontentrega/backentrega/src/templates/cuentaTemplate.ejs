@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+    <title>Document</title>
+    <style>
+        @media print {            
+            .column {
+                box-sizing: border-box;
+                position: relative;
+            }
+            .logo2 {
+                width: 150px;
+            }
+
+            .logo {
+                width: 55px;
+                height: auto;
+                margin: auto;
+            }
+
+            .qr-code {                
+                z-index: 9999;
+                padding-right: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-sans">    
+    <!-- Header -->
+    <header class="p-2">
+        <div class="container flex justify-between items-center">
+            <!-- Columna Izquierda -->
+            <div class="flex w-1/5">
+                <div class="text-center">
+                    <img src="<%= assetsURL %>/logo3.png" alt="background" class="w-24 h-24 mr-auto" />                    
+                </div>                
+            </div>
+    
+            <!-- Columna Centro -->
+            <div class="w-3/5 text-center">
+                <div class="flex flex-col justify-between font-sans">
+                    <h4 class="text-lg m-0 mb-auto">Gobierno Autónomo del Departamento de Oruro</h4>
+                    <h6 class="text-sm m-0">Secretaria Deptal. de Administración y Finanzas Publicas</h6>
+                    <h6 class="text-sm m-0 mb-2">Area de Contabilidad</h6>                    
+                    <h5 class="text-lg font-semibold mt-auto">REPORTE DE DEUDA - GENERAL</h5>
+                </div>
+            </div>
+    
+            <!-- Columna Derecha -->
+            <div class="w-1/5 text-right text-xs">
+                <img src="<%= qrCodeDataUrl %>" alt="QR Code" class="w-24 h-24 ml-auto">                
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto mt-1 text-sm">
+        <div class="">
+            <p class="text-right font-light"><%= info.fecha %></p> 
+        </div>
+        <div class="mb-6 mt-1">
+            <% if (data) { %>
+                <% let count = 1; let sw = true; %>
+                <% data.rows.forEach(function(row){ %>
+                    <% if (row) { %>
+                        <div class="container mx-auto bg-gray-50 px-2 py-1 mt-2">
+                            <div class="flex">
+                                <strong class="text-xs font-semibold flex-shrink-0 w-36">Nombre del Deudor</strong>
+                                <span class="text-xs">: <%= row.nombre_deudor %></span>
+                            </div>
+                            <div class="flex">
+                                <strong class="text-xs font-semibold flex-shrink-0 w-36">Cod Deudor</strong>
+                                <span class="text-xs">: <%= row.ci %></span>
+                            </div>
+                            <div class="flex">
+                                <strong class="text-xs font-semibold flex-shrink-0 w-36">Gestion Deuda</strong>
+                                <span class="text-xs">: <%= row.gestion_generacion_deuda %></span>
+                            </div>
+                            <div class="flex">
+                                <strong class="text-xs font-semibold flex-shrink-0 w-36">Tipo de Deuda</strong>
+                                <span class="text-xs">: <%= row.tipo_cuenta_ %></span>
+                            </div>
+                            <div class="flex">
+                                <strong class="text-xs font-semibold flex-shrink-0 w-36">Motivo de Deuda</strong>
+                                <span class="text-xs">: <% row.motivo_deuda.split('-').forEach((r, index) => { %>                                    
+                                        <%= r %>,&nbsp;&nbsp;
+                                <% }) %></span>
+                            </div>
+                            <div class="flex">
+                                <strong class="text-xs font-semibold flex-shrink-0 w-36">Documento Respaldo</strong>
+                                <span class="text-xs">: <%= row.documentacion_respaldo %></span>
+                            </div>
+                            <div class="flex">
+                                <strong class="text-xs font-semibold flex-shrink-0 w-36">Descripcion Deuda</strong>
+                                <span class="text-xs">: <%= row.descripcion_deuda %> Bs.</span>
+                            </div>
+                            <div class="flex">
+                                <strong class="text-xs font-semibold flex-shrink-0 w-36">Saldo</strong>
+                                <span class="text-xs">: <%= row.saldo %> Bs.</span>
+                            </div>
+                            <div class="flex">
+                                <strong class="text-xs font-semibold flex-shrink-0 w-36">Adjuntos:</strong>
+                                <span class="text-xs">: <%= row.adjuntos %></span>
+                            </div>
+                        </div>
+                        <% if (count>=5 & sw) { %>
+                            <div style="page-break-before: always;"></div>
+                            <% count = 1; sw = false %>
+                        <% } else { %>
+                            <% if (count>=5) { %>
+                                <div style="page-break-before: always;"></div>
+                                <% count = 1 %>
+                            <% } else { %>
+                                <% count++ %>
+                            <% } %>
+                        <% } %>                                       
+                    <% } %>                               
+                <% }); %>
+            <% } %>   
+        </div>                 
+    </main>
+</body>
+
+</html>

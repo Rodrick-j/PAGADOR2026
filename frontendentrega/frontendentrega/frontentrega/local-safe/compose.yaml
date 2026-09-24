@@ -1,0 +1,78 @@
+name: pagador-local-isolated
+
+services:
+  database:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: pagador_local
+      MYSQL_USER: pagador_local
+      MYSQL_PASSWORD: pagador_local_only
+      MYSQL_ROOT_PASSWORD: pagador_root_local_only
+    ports:
+      - "127.0.0.1:3307:3306"
+    volumes:
+      - pagador_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-ppagador_root_local_only"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    networks:
+      - pagador_internal
+      - host_access
+
+  backend:
+    build:
+      context: ../backentrega
+      dockerfile: Dockerfile.local-safe
+    restart: unless-stopped
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      NODE_ENV: development
+      PORT: "8080"
+      TZ: America/La_Paz
+      DB_HOST: database
+      DB_PORT: "3306"
+      DB_NAME: pagador_dump
+      DB_USER: pagador_local
+      DB_PASS: pagador_local_only
+      JWT_ISSUER: pagador-local
+      JWT_SECRET: pagador-local-development-secret
+      BACKEND_BASE_URL: http://127.0.0.1:8080
+      WEB_CLIENT_URL: http://127.0.0.1:6500
+      WEB_SERVER_URL: http://127.0.0.1:8080
+      STORAGE_DRIVER: ftp
+      FTP_HOST: 127.0.0.1
+      FTP_PORT: "1"
+      FTP_USER: disabled
+      FTP_PASS: disabled
+      FTP_BASE_DIR: /disabled
+      # El backend hace JSON.parse(FERIADOS_BASE) sin red (obtenerFeriadosBoliviaOffline).
+      # Lista offline de feriados nacionales de fecha fija (dato civico publico, no institucional).
+      FERIADOS_BASE: '[{"mes":1,"dia":1},{"mes":1,"dia":22},{"mes":5,"dia":1},{"mes":6,"dia":21},{"mes":8,"dia":6},{"mes":11,"dia":2},{"mes":12,"dia":25}]'
+    networks:
+      - pagador_internal
+
+  gateway:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - ./nginx.local.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - pagador_internal
+      - host_access
+
+volumes:
+  pagador_mysql_data:
+
+networks:
+  pagador_internal:
+    internal: true
+  host_access:

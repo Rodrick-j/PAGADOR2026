@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+    <title>Document</title>
+    <style>
+        @media print {            
+            .column {
+                box-sizing: border-box;
+                position: relative;
+            }
+            .logo2 {
+                width: 150px;
+            }
+
+            .logo {
+                width: 55px;
+                height: auto;
+                margin: auto;
+            }
+
+            .qr-code {                
+                z-index: 9999;
+                padding-right: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-sans">    
+    <!-- Header -->
+    <header class="p-2">
+        <div class="container flex justify-between items-center">
+            <!-- Columna Izquierda -->
+            <div class="flex w-1/5">
+                <div class="text-center">
+                    <img src="<%= assetsURL %>/logo3.png" alt="background" class="w-24 h-24 mr-auto" />                    
+                </div>                
+            </div>
+    
+            <!-- Columna Centro -->
+            <div class="w-3/5 text-center">
+                <div class="flex flex-col justify-between font-sans">
+                    <h4 class="text-lg m-0 mb-auto">Gobierno Autónomo del Departamento de Oruro</h4>
+                    <h6 class="text-sm m-0">Secretaria Deptal. de Administración y Finanzas Publicas</h6>
+                    <h6 class="text-sm m-0 mb-2">Area de Contabilidad</h6>                    
+                    <h5 class="text-lg font-semibold mt-auto">REPORTE INDIVIDUAL SEGUIMIENTO</h5>
+                </div>
+            </div>
+    
+            <!-- Columna Derecha -->
+            <div class="w-1/5 text-right text-xs">
+                <img src="<%= qrCodeDataUrl %>" alt="QR Code" class="w-24 h-24 ml-auto">                
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto mt-1 text-sm">
+        <div class="mb-6 mt-1">
+            <div class="container mx-auto bg-gray-100 p-2">
+                <div class="flex">
+                    <strong class="text-xs font-semibold flex-shrink-0 w-36">Nombre del Deudor</strong>
+                    <span class="text-xs">: <%= data.nombre_deudor %></span>
+                </div>
+                <div class="flex">
+                    <strong class="text-xs font-semibold flex-shrink-0 w-36">Cod Deudor</strong>
+                    <span class="text-xs">: <%= data.ci %></span>
+                </div>
+                <div class="flex">
+                    <strong class="text-xs font-semibold flex-shrink-0 w-36">Gestion Deuda</strong>
+                    <span class="text-xs">: <%= data.gestion_generacion_deuda %></span>
+                </div>
+                <div class="flex">
+                    <strong class="text-xs font-semibold flex-shrink-0 w-36">Tipo de Deuda</strong>
+                    <span class="text-xs">: <%= data.tipo_cuenta %></span>
+                </div>
+                <div class="flex">
+                    <strong class="text-xs font-semibold flex-shrink-0 w-36">Cantidad de Registros</strong>
+                    <span class="text-xs">: <%= data.cantidad_registros %></span>
+                </div>
+                <div class="flex">
+                    <strong class="text-xs font-semibold flex-shrink-0 w-36">Saldo</strong>
+                    <span class="text-xs">: <%= data.saldo_real %> Bs.</span>
+                </div>
+                <div class="flex">
+                    <strong class="text-xs font-semibold flex-shrink-0 w-36">Adjuntos:</strong>
+                    <span class="text-xs">: <%= data.doc_adjuntos %></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2 class="font-semibold mb-2">Detalle Seguimiento</h2>
+            <div class="flex justify-center">
+                <% if (data.rows.lenght > 0) { %>
+                <table class="text-sm border-collapse border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="border border-gray-300">#</th>
+                            <th class="border border-gray-300">Fecha</th>
+                            <th class="border border-gray-300">Descripcion</th>
+                            <th class="border border-gray-300">Observacion</th>
+                            <th class="border border-gray-300">Dias</th>
+                            <th class="border border-gray-300">Archivos Adjuntos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <% let count = 1; %>
+                            <% data.rows.forEach(function(row){ %>
+                                <% if (row) { %>
+                                    <tr class="text-xs">
+                                        <td class="border border-gray-300 px-1"><%= count++ %></td>
+                                        <td class="border border-gray-300 px-1"><%= row.fecha %></td>
+                                        <td class="border border-gray-300 px-1"><%= row.descripcion %></td>
+                                        <td class="border border-gray-300 px-1"><%= row.observacion %></td>
+                                        <td class="border border-gray-300 px-1"><%= row.dias %></td>
+                                        <td class="border border-gray-300 px-1"><%= row.adjuntos %></td>
+                                    </tr>
+                                <% } %>                               
+                            <% }); %>                        
+                    </tbody>
+                </table>
+                <% }  else { %>
+                    <p class="bg-gray-200 p-2 text-center"> --- SIN REGISTROS ---</p>
+                <% } %>
+            </div>
+        </div>          
+    </main>
+</body>
+
+</html>

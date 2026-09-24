@@ -1,0 +1,11 @@
+.git
+node_modules
+build
+**/*.log
+*.zip
+.DS_Store
+.env*
+tests
+coverage
+storage
+.npmrc

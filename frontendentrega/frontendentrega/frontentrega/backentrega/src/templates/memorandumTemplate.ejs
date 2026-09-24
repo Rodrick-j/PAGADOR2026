@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+    <title>Document</title>
+    <style>
+        @media print {            
+            .column {
+                box-sizing: border-box;
+                position: relative;
+            }
+            .logo2 {
+                width: 150px;
+            }
+
+            .logo {
+                width: 55px;
+                height: auto;
+                margin: auto;
+            }
+
+            .qr-code {                
+                z-index: 9999;
+                padding-right: 1rem;
+            }
+            .text-center2 {
+                text-align: center;
+                position: relative;
+            }
+            .text-xxs {
+                font-size: 8px;
+            }
+           .anulado-watermark {
+                position: fixed;
+                top: 40%;
+                left: 10%;
+                transform: rotate(-45deg);                
+                z-index: 9999;
+                font-family: 'Times New Roman', serif;
+                font-size: 120px;
+                font-weight: bold;
+                color: rgba(255, 0, 0, 0.15);
+                width: 100%;
+                text-align: center;
+                pointer-events: none;
+                user-select: none;
+            }
+         
+        }
+    </style>
+</head>
+
+<body class="font-sans mx-6">    
+            <!-- Header -->
+            <header class="p-2 text-black">
+            <!-- <div class="container mx-auto flex justify-between items-center">-->
+                <!-- Columna Izquierda -->
+                <!-- <div class="flex w-1/5">
+                    <div class="mr-4 text-center">
+                        <img src="<%= assetsURL %>/logo2.png" alt="GADOR" class="w-24 h-24 mx-auto" />
+                        <p class="font-sans text-xs m-0 mt-2">Gobierno Autónomo del Departamento de Oruro</p>
+                        <span class="text-xs">Oruro, <%= info.fecha_memo_registro %></span>
+                    </div>                
+                </div>--> 
+            
+                    <!-- Columna Centro -->
+                    <div class="text-center">
+                        <div class="flex flex-col justify-between font-sans">
+                            <h4 class="text-lg m-0 mb-auto">Gobierno Autónomo del Departamento de Oruro</h4>
+                            <h6 class="text-sm m-0 mb-2">Secretaria Deptal. de Administración y Finanzas Publicas</h6>
+                              <% if (info.tipo_memorandum === "" || info.tipo_memorandum === "MEMORANDUM_SIN_COBRO") { %>
+                                    <h5 class="text-lg font-semibold mt-2">MEMORANDUM OFICIAL</h5>
+                              <% }else if(info.tipo_memorandum === "MEMORANDUM DE INSTRUCCIÓN"){ %>
+                                    <h5 class="text-lg font-semibold mt-2">MEMORANDUM DE INSTRUCCION</h5>                                 
+                              <% }else{ %>
+                                    <h5 class="text-lg font-semibold mt-2">MEMORANDUM DE ASIGNACION DE FUNCIONES</h5>
+                              <% }%>  
+                        </div>
+                        <div class="absolute top-0 right-0 p-1">
+                            <img src="<%= qrCodeDataUrl %>" alt="QR Code" class="w-24 h-24">
+                        </div>                        
+                    </div>
+                    <div class="w-4/5 text-right">
+                        <strong class="text-xs font-semibold">Nro. Cite</strong>
+                        <span class="text-xs">: <%= info.cod_depart_memo %></span>
+                    </div>
+                    <!-- Columna Derecha -->
+                    <!-- <div class="w-1/5 text-right">
+                        <img src="<%= qrCodeDataUrl %>" alt="QR Code" class="w-24 h-24 m-0 p-0 float-right">
+                    </div>-->
+                </div>
+            </header>
+
+            <div class="container mx-auto flex justify-between items-center">
+                <!-- Columna Izquierda -->
+                <div class="flex w-2/5">
+                    <div class="mr-4 text-center">
+                        <img src="<%= assetsURL %>/logo3.png" alt="GADOR" class="w-24 h-24 mx-auto" />
+                        <p class="font-sans text-xs m-0 mt-2">Gobierno Autónomo del Departamento de Oruro</p>
+                        <span class="text-xs">Oruro, <%= info.fecha_memo_registro %></span>
+                    </div>                
+                </div>
+        
+                <!-- Columna Centro -->
+                <div class="w-3/5 text-center">
+                    <!--Columna central datos-->
+ 
+ 
+                    <% if (info.tipo_memorandum === "MEMORANDUM DE INSTRUCCIÓN") { %>
+                        <div class="container mx-auto bg-gray-100 p-1 ">                     
+                            <div class="flex">
+                                <strong class="text-xs font-semibold">Señor(es)</strong>
+                                <span class="text-xs">: <%= info.usuario_nombre_finanzas %></span>
+                            </div>
+                            <div class="flex">
+                                <strong class="text-xs font-semibold">CI</strong>
+                                <span class="text-xs">: <%= info.ci_finanzas %></span>
+                            </div>
+                            <div class="flex">
+                                <strong class="text-xs font-semibold">Cargo</strong>
+                                <span class="text-xs">: <%= info.usuario_cargo_finanzas  %></span>
+                            </div>
+                            <div class="flex">
+                                <strong class="text-xs font-semibold">Item/Contrato</strong>
+                                <span class="text-xs">: <%= info.contrato_finanzas %></span>
+                            </div>
+                            <div class="flex">
+                                <strong class="text-xs font-semibold">Celular</strong>
+                                <span class="text-xs">: <%= info.nume_celular_finanzas%></span>
+                            </div>
+                            <div class="flex">
+                                <strong class="text-xs font-semibold">Presente</strong>
+                                <!--<span class="text-xs">: <%= info.gestion %></span>-->
+                            </div>              
+                        </div>  
+                    <% }else{ %>
+                        <div class="container mx-auto bg-gray-100 p-1 ">                     
+                            <div class="flex">
+                                <strong class="text-xs font-semibold">Señor(es)</strong>
+                                <span class="text-xs">: <%= info.usuario_nombre %></span>
+                            </div>
+                            <div class="flex">
+                                <strong class="text-xs font-semibold">CI</strong>
+                                <span class="text-xs">: <%= info.ci %></span>
+                            </div>
+                            <div class="flex">
+                                <strong class="text-xs font-semibold">Cargo</strong>
+                                <span class="text-xs">: <%= info.usuario_cargo  %></span>
+                            </div>
+                            <div class="flex">
+                                <strong class="text-xs font-semibold">Item/Contrato</strong>
+                                <span class="text-xs">: <%= info.contrato %></span>
+                            </div>
+                            <div class="flex">
+                                <strong class="text-xs font-semibold">Celular</strong>
+                                <span class="text-xs">: <%= info.nume_celular%></span>
+                            </div>
+                            <div class="flex">
+                                <strong class="text-xs font-semibold">Presente</strong>
+                                <!--<span class="text-xs">: <%= info.gestion %></span>-->
+                            </div>              
+                        </div>  
+                    <% }%>
+
+                             
+                </div> 
+                
+            </div>
+            <svg width="100%" height="4" xmlns="http://www.w3.org/2000/svg">
+                <line x1="0" y1="2" x2="100%" y2="2" stroke="#333" stroke-width="2"/>
+            </svg>
+
+             <% if (info.estado_memorandum === "ANULADO") { %>
+                        <div class="anulado-watermark">ANULADO</div>
+             <% } %>
+               <% if (info.estado_memorandum === "RECHAZADO") { %>
+                        <div class="anulado-watermark">RECHAZADO</div>
+             <% } %>
+        <!--Parte central del texto-->
+        <div class="container mx-auto py-2">
+            <div class="container mx-auto bg-gray-100 p-2">
+                <div class="flex">
+                    <% if (info.tipo_memorandum === "" || info.tipo_memorandum === "MEMORANDUM DE INSTRUCCIÓN" ) { %>
+                        <strong class="text-xs font-semibold flex-shrink-0 w-26">FF Y OF</strong>
+                        <span class="text-xs w-36">: <%= info.ffyOrg %></span><!--Revisar-->
+                    
+                        <strong class="text-xs font-semibold flex-shrink-0 w-26">A.P.</strong>
+                        <span class="text-xs w-52">: <%= info.apertura_viatico %></span><!--Revisar-->
+
+                        <strong class="text-xs font-semibold flex-shrink-0 w-26">SISIN</strong>
+                        <span class="text-xs w-46">: <%= info.sisin %></span><!--Revisar-->
+                    <% } %>
+                </div>     
+            </div>
+            <% if (info.tipo_memorandum === "" || info.tipo_memorandum === "MEMORANDUM_SIN_COBRO") { %>
+                <div class="container mx-auto p-1">
+                    <div class="flex">
+                        <span class="text-xs">Sr(a)</span>
+                        <span class="text-sm">: <%= info.usuario_nombre %></span><!--Revisar-->
+                    </div>
+                    <div>
+                        <span class="text-xs">Por instrucciones de mi autoridad. Usted es declarado en comision mediante MEMORANDUM para realizar lo siguiente:  </span>          
+                    </div>
+                </div>  
+            <% } %> 
+             <% if (info.tipo_memorandum === "MEMORANDUM DE INSTRUCCIÓN" ) { %>
+                <div class="container mx-auto p-1">                    
+                    <div>
+                        <span class="text-xs">Por la presente se le <b>INSTRUYE</b>, a su persona viabilizar el tramite correspondiente para el pago de viaticos, de acuerdo a normas legales y disposiciones conexas, para la asistencia de la Maxima Autoridad del Departamento a la siguiente actividad:  </span>          
+                    </div>
+                    <div class="flex">
+                        <% 
+                            const objetivosUnicos = [...new Set(data.rows.map(r => r.objetivo_viaje))];
+                        %>
+
+                        <span class="text-sm">
+                           <b> <%= objetivosUnicos.join(' - ') %></b> 
+                        </span>
+                    </div>
+                    <div>
+                        <span class="text-xs">Actividad la cual debera realizar bajo el siguiente detalle:  </span>          
+                    </div>
+                </div>  
+            <% } %>   
+        </div>
+
+        <!--Cuerpo nuevo de la tabla-->
+        <div>            
+            <% if (info.tipo_memorandum === "" || info.tipo_memorandum === "MEMORANDUM_SIN_COBRO" ||  info.tipo_memorandum === "MEMORANDUM DE INSTRUCCIÓN") { %>
+                 <div class="flex justify-center">
+               
+                    <table class="text-sm text-left border-collapse border border-gray-300" style="width: 100%;">
+                        <thead>
+                            <tr class="bg-gray-200">
+                                <th class="border border-gray-300 px-2 p-0 text-center"  style="width: 300px;">Objetivo de Viaje</th>
+                                <th class="border border-gray-300 px-2 p-0 text-center"  style="width: 250px;">Lugar</th>
+                                <th class="border border-gray-300 px-2 p-0 text-center"  style="width: 150px;">Vehiculo Publico y/o Oficial</th>
+                                <th class="border border-gray-300 px-2 p-0 text-center"  style="width: 120px;">Fecha Ida</th>
+                                <th class="border border-gray-300 px-2 p-0 text-center"  style="width: 120px;">Fecha Retorno</th>
+                                <th class="border border-gray-300 px-2 p-0 text-center"  style="width: 80px;">Hora Partida</th>
+                                <th class="border border-gray-300 px-2 p-0 text-center"  style="width: 80px;">Hora Retorno</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (data) { %>
+                                <% data.rows.forEach(function(row){ %>
+                                    <tr>
+                                        <td class="text-xs border border-gray-300 px-2 p-0" style="width: 300px;"><%= row.objetivo_viaje %></td>
+                                        <td class="text-xs border border-gray-300 px-2 p-0 text-center" style="width: 250px;"><%= row.destino_reg %></td>
+                                        <td class="text-xs border border-gray-300 px-2 p-0 text-center" style="width: 150px;"><%= row.tipo_vehiculo_op %></td>
+                                        <td class="text-xs border border-gray-300 px-2 p-0 text-center" style="width: 120px;"><%= row.fecha_inicio %></td>
+                                        <td class="text-xs border border-gray-300 px-2 p-0 text-center" style="width: 120px;"><%= row.fecha_fin %></td>
+                                        <td class="text-xs border border-gray-300 px-2 p-0 text-center" style="width: 80px;"><%= row.hora_inicio %></td>   
+                                        <td class="text-xs border border-gray-300 px-2 p-0 text-center" style="width: 80px;"><%= row.hora_fin %></td>                      
+                                    </tr>                               
+                                <% }); %>
+                                <% 
+                                    let observacionesConcatenadas = data.rows.map(row => row.observacion).join(' '); 
+                                %>
+                                 <% if (info.tipo_memorandum === "MEMORANDUM DE INSTRUCCIÓN" ) { %>
+                                     <tr>
+                                        <td colspan="7" class="text-xs border border-gray-300 px-2 py-1 bg-gray-100" style="width: 300px;">
+                                        Observaciones: <%= observacionesConcatenadas %> Transporte: <%= info.tipo_transporte %> 
+                                        </td>
+                                    </tr>  
+                                 <% }else{ %>
+                                     <tr>
+                                        <td colspan="7" class="text-xs border border-gray-300 px-2 py-1 bg-gray-100" style="width: 300px;">
+                                        Observaciones: <%= observacionesConcatenadas %> 
+                                        </td>
+                                  </tr>  
+                                 <% } %>
+                                  
+                                <tr>
+                                    <td colspan="7" class="text-xs border border-gray-300 px-2 py-1" style="width: 300px;">
+                                    Descripcion de Observaciones: <%= info.observacion %>
+                                    </td>
+                                </tr>                             
+
+                            <% } %>
+                        </tbody>
+                    </table>               
+                </div>
+            <% } else{ %>  
+                <div >
+                    <span class="text-sm font-semibold ">Ref. INSTRUCCION Y CUMPLIMIENTO <br> </span>
+                    <span class="text-sm"> <br></span>
+                    <span class="text-sm">Señor(a): <%= info.usuario_nombre %> <br></span>      
+                    <span class="text-sm"> <br></span>     
+                    <span class="text-sm">Conforme normativa D.S.Nº 181, Articulo 39, Reglamento especifico RESABS y la faculta que se me otorga, <br></span>
+                    <span class="text-sm">por la presente se designa a Ud.: <br></span>
+                    <span class="text-sm font-semibold"><%= info.observacion %> </span>    
+                    <span class="text-sm">, el dia :</span>            
+                    <span class="text-sm font-semibold"><%= info.fecha_inicio_viaje %></span>   
+                    <span class="text-sm">como fecha limite.</span>   
+                    <span class="text-sm"> <br></span>
+                </div>
+            <% }%>  
+        </div>
+
+
+
+        <!---Cuerpo de la tabla -->
+        <!--<div class="container mx-auto py-2">
+            <div class="grid grid-cols-12 gap-2 text-center text-xs mb-4 leading-none">
+                <div class="border border-gray-300 px-4 p-0">Objetivo de Viaje</div>
+                <div class="border border-gray-300 px-4 p-0">Lugar</div>                
+                <div class="border border-gray-300 px-4 p-0">Vehiculo Publico y/o Oficial</div>
+                <div class="border border-gray-300 px-4 p-0">Fecha Ida</div>
+                <div class="border border-gray-300 px-4 p-0">Fecha Retorno</div>
+                <div class="border border-gray-300 px-4 p-0">Hora Partida</div>
+                <div class="border border-gray-300 px-4 p-0">Hora Retorno</div>
+            </div>
+            <div class="grid grid-cols-12 gap-2 text-center text-xs">
+                <% if (data) { %>
+                    <% data.rows.forEach(function(row){ %>
+                        <div class="border border-gray-300 px-4 p-0"><%= row.objetivo_viaje %></div>
+                        <div class="border border-gray-300 px-4 p-0"><%= row.destino_reg %></div>
+                        <div class="border border-gray-300 px-4 p-0"><%= row.tipo_vehiculo_op %></div>
+                        <div class="border border-gray-300 px-4 p-0"><%= row.fecha_dia %></div>
+                        <div class="border border-gray-300 px-4 p-0"><%= row.fecha_dia %></div>
+                        <div class="border border-gray-300 px-4 p-0"><%= row.hora_inicio %></div>
+                        <div class="border border-gray-300 px-4 p-0"><%= row.hora_fin %></div>
+                    
+                    <% }); %>
+                <% } %>           
+            </div>    
+        </div>        -->
+
+
+        <!--Parte final del texto-->
+        <div class="container mx-auto py-2">
+              <!--  <div >
+                    <span class="text-sm"> Observacion :</span>
+                    <span class="text-sm"><%= data.observacion %><</span>           
+          
+                </div>-->
+                <% if (info.tipo_memorandum === "" || info.tipo_memorandum === "MEMORANDUM_SIN_COBRO" ) { %>
+                    <div >
+                        <div class="text-xs">A la conclusion del mismo debe presentar el informe respectivo en el plazo de 8 dias.  </div>
+                        <div class="text-xs">En espera al estricto cumplimiento a este instructivo le saludamos.</div>                                   
+                        <div class="text-xs">Atentamente <br><br></div>
+                    </div>
+                    <div>
+                        <% info.autorizado_por.forEach(function(jefe){ %>
+                            <tr>                          
+                                <div style="font-size:10px"><%= jefe.aprobado%></div>            
+                            </tr>                               
+                        <% }); %>
+                        <div style="font-size:10px"><%= info.aprobado_rrhh%></div>
+                        <div style="font-size:10px"><%= info.aprobado_contabilidad%></div>
+                        <div style="font-size:10px">cc.Cajas</div>
+                        <div style="font-size:10px">cc.ARCH</div>     
+                        <div style="font-size:10px"><%= info.usuario_sigla %></div>      
+                        <div style="font-size:10px"><%= info.tipo_memo_repo %></div>    
+                    </div>
+                <% } else if(info.tipo_memorandum==="MEMORANDUM DE INSTRUCCIÓN") {%>
+                    <div >
+                        <span class="text-xs">Sin otro particular y en espera de su estricto cumplimiento, saluda a usted. <br> </span>                                           
+                        <span class="text-xs">Atentamente <br><br></span>
+                        <div>
+                            <% info.autorizado_por.forEach(function(jefe){ %>
+                                <tr>                          
+                                    <div style="font-size:10px"><%= jefe.aprobado%><br></div>            
+                                </tr>                               
+                            <% }); %>
+                            <div style="font-size:10px"><%= info.aprobado_rrhh%></div>
+                            <div style="font-size:10px"><%= info.aprobado_contabilidad%></div>
+                            <div style="font-size:10px">cc.Cajas</div>
+                            <div style="font-size:10px">cc.ARCH</div>     
+                            <div style="font-size:10px"><%= info.usuario_sigla %></div>      
+                            <div style="font-size:10px"><%= info.tipo_memo_repo %></div>    
+                        </div>
+                    </div>
+                <% } else {%>
+                    <div >
+                        <span class="text-sm">Demando de su parte estricto cumplimiento a esta instruccion, conforme establece el Reglamento Interno de <br> </span>
+                        <span class="text-sm">Personal del Gobierno Autonomo Departamental de Oruro.<br></span>    
+                        <span class="text-sm"><br></span> 
+                        <span class="text-sm">Con este motivo, saludo a usted con las consideraciones mas distinguidas.<br></span>       
+                        <span class="text-sm"><br></span>                     
+                        <span class="text-sm">Atentamente <br><br><br><br><br><br></span>
+                    </div>
+                <% } %> 
+            </div>
+        </div>
+
+    </main>
+</body>
+
+</html>

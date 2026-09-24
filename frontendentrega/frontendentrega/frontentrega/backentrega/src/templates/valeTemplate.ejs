@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+    <title>Document</title>
+    <style>
+        @media print {
+            body {
+                margin: 0; /* Eliminar márgenes */
+            }
+
+            .column:after {
+                content: attr(data-content);
+                font-family: 'Times New Roman', serif; 
+                font-size: 10em;
+                text-align: center; /* Cambia a "center" para centrar horizontalmente */
+                color: rgba(224, 224, 224, 0.950);
+                z-index: -9999;
+                
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                align-content: center;
+                position: absolute; /* Cambia a "absolute" para posicionar en relación con el contenedor */
+                transform: rotate(-85deg);
+                pointer-events: none;
+                user-select: none;
+
+                /* Ajustar el posicionamiento de acuerdo a tu diseño */
+                top: 50%;
+                left: -25%; 
+                /*transform: translate(-50%, -50%); /* Centrar vertical y horizontalmente */
+            }
+
+            .container {
+                display: flex;
+                height: 100vh;
+            }
+
+            .column {
+                box-sizing: border-box;
+                font-size: 10px; /* Reducir el tamaño de la fuente */
+                position: relative;
+                width: 25%;
+                padding: 1rem;
+            }
+
+            .text-xss {
+                font-size: 9px;
+            }
+
+            .text-xss2 {
+                font-size: 8px;
+                position: absolute;
+                bottom: 0;
+                font-style: italic;
+            }
+
+            .titulo {
+                top: 0;
+                left: 0;
+                position: absolute;
+                padding-left: 1rem;
+            }
+
+            .logo {
+                width: 55px;
+                height: auto;
+                margin: auto;
+            }
+
+            .logo2 {
+                width: 100px;
+            }
+
+            .qr-code {
+                position: absolute;
+                top: 0;
+                right: 0;
+                z-index: -9999;
+                padding-right: 1rem;
+            }
+
+            .text-center2 {
+                text-align: center;
+                position: relative;
+            }
+
+            .text-center2::after {
+                content: "";
+                position: absolute;
+                bottom: 15px; 
+                left: 0;
+                right: 0;
+                border-bottom: 1px dotted black; 
+            }
+            .anulado-watermark {
+                position: absolute;
+                top: 50%;
+                left: -25%; 
+                transform: rotate(-85deg);
+                z-index: -1;
+                font-family: 'Times New Roman', serif;
+                font-size: 5em;
+                color: rgba(255, 0, 0, 0.3); /* Color rojo con opacidad */
+                pointer-events: none;
+                user-select: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-sans">
+    <div class="container max-w-none">
+        <% for (let i = 0; i < 4; i++) { %>
+            <div class="column" data-content="<%= i === 0 ? 'ORIGINAL' : 'COPIA_'+i %>">                
+                <% if (i !== 0) { %>
+                    <style>
+                        .column[data-content="<%= i === 0 ? 'ORIGINAL' : 'COPIA_'+i %>"] {
+                            border-left: 1px dashed rgba(0, 0, 0, 0.5);
+                        }
+                    </style>
+                <% } %>
+                <div class="titulo">
+                    <h1 class="font-mono font-hairline"><%= i === 0 ? 'ORIGINAL' : 'COPIA_'+i %></h1>
+                </div>
+                <div class="logo2 text-center mb-2">
+                    <img src="<%= assetsURL %>/android-chrome-192x192.png" alt="background" class="logo" />
+                    <p class="text-xss leading-none">Gobierno Autónomo Departamental de Oruro</p>
+                </div>
+                <h5 class="text-sm text-center mb-2 font-sans font-bold">VALE DE COMBUSTIBLE</h5>
+                <div class="qr-code text-right">
+                    <p class="font-mono">Nro Vale: <span class="font-thin"><%= data.cod_vale %></span></p>
+                    <img src="<%= qrCodeDataUrl %>" alt="QR Code" class="w-20 h-20 m-0 p-0 float-right">
+                </div>
+                <div class="border-t pt-4">
+                    <p><b>A. P.:</b>&nbsp;&nbsp;<span class="font-thin uppercase"><%= data.partida%></span></p>
+                    <p><b>Entregado al conductor:</b>&nbsp;&nbsp;<span class="font-thin uppercase"><%= data.conductor %></span></p>
+                    <p><b>Vehiculo:</b>&nbsp;&nbsp;<span class="font-thin uppercase"><%= data.vehiculo %></span></p>
+                    <p><b>Marca:</b>&nbsp;&nbsp;<span class="font-thin uppercase"><%= data.marca %></span></p>
+                    <p class="mb-1"><b>Placa:</b>&nbsp;&nbsp;<span class="font-thin uppercase"><%= data.placa %></span></p>
+                    <p class="flex justify-between"><b>Tipo de combustible:</b>&nbsp;&nbsp;<span class="font-thin"><%= data.combustible %></span>
+                        <b>Litros:</b>&nbsp;&nbsp;<span class="font-thin"><%= data.litros %></span></p>
+                    <p><b>La cantidad de:</b>&nbsp;&nbsp;<span class="font-thin uppercase"><%= data.concepto %></span> Litros</p>
+                    <p class="mb-2"><b>Validos hasta:</b>&nbsp;&nbsp;<span class="font-thin"><%= data.fecha_validez %></span></p>
+                    <p class="flex justify-between mb-1"><b>Destino:</b>&nbsp;&nbsp;<span class="font-thin uppercase"><%= data.destino %></span>
+                        Km:&nbsp;&nbsp;<span class="font-thin"><%= data.distancia %></span></p>
+                    <% if (data.anulado) { %>
+                        <div class="anulado-watermark">ANULADO</div>
+                    <% } %>
+                    <p><b>Responsable:</b>&nbsp;&nbsp;<span class="font-thin uppercase"><%= data.responsable %></span></p>
+                    <p><b>Cargo:</b>&nbsp;&nbsp;<span class="font-thin uppercase"><%= data.cargo %></span></p>
+                    <p class="text-justify mb-1"><b>Observaciones:</b>&nbsp;&nbsp;<span class="font-thin"><%= data.observaciones %></span></p>
+                    <p class="text-justify"><b>Destino Detallado:</b>&nbsp;&nbsp;<span class="font-thin"><%= data.destino_detallado %></span></p>
+                    <p class="text-justify"><b>Nº Vale Manual:</b>&nbsp;&nbsp;<span class="font-thin"><%= data.numero_recibo %></span></p>
+                    <div class="h-24"></div>
+                    <p class="text-center2"><b>Firma Autorizada</b></p>
+                    <div class="h-24"></div>
+                    <p class="text-center2"><b>Recibi Conforme</b></p>
+                </div>
+                <div class="text-xss2">
+                    <p>Fecha y Hora de Emision:&nbsp;&nbsp;<span class="font-thin"><%= info.fecha_hora %></span></p>
+                    <p>Generado por:&nbsp;&nbsp;<span class="font-thin"><%= info.email %></span></p>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</body>
+
+</html>
